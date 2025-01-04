@@ -17,10 +17,13 @@ const FormComponent = () => {
     const navigate = useNavigate()
 
     const createNewRoomId = () => {
-        setCurrentUser({ ...currentUser, roomId: uuidv4() })
+        const newRoomId = uuidv4()
+        console.log(currentUser)
+        setCurrentUser((prevUser) => ({ ...prevUser, roomId: newRoomId }))
+        console.log("Generated Room Id:", newRoomId)
         toast.success("Created a new Room Id")
         usernameRef.current?.focus()
-    }
+    }    
 
     const handleInputChanges = (e) => {
         const name = e.target.name
@@ -111,13 +114,13 @@ const FormComponent = () => {
                 />
                 <button
                     type="submit"
-                    className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-black"
+                    className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-white bg-slate-500"
                 >
                     Join
                 </button>
             </form>
             <button
-                className="cursor-pointer select-none underline"
+                className="cursor-pointer select-none underline text-cyan-800 border-b-indigo-400"
                 onClick={createNewRoomId}
             >
                 Generate Unique Room Id
