@@ -23,7 +23,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("User is connected: " + socket.id);
+  console.log("User connected: " + socket.id);
 });
 
 // Handle "/api/code/execute" route
