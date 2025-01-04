@@ -1,4 +1,5 @@
 import illustration from "../../assets/illustration.svg"
+import FormComponent from "../../forms/FormComponent";
 function Home()
 {
     return  (
@@ -12,7 +13,7 @@ function Home()
                 />
             </div>
             <div className="flex w-full items-center justify-center sm:w-1/2">
-                {/* <FormComponent />    */}
+                <FormComponent />   
             </div>
         </div>
         {/* <Footer /> */}
