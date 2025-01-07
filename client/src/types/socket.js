@@ -27,7 +27,7 @@ const SocketEvent = {
 };
 
 const SocketContext = {
-    socket: Socket,
+    socket: Socket
 };
 
 export { SocketEvent, SocketContext };

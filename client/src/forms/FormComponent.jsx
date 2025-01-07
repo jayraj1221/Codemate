@@ -12,7 +12,7 @@ const FormComponent = () => {
     const location = useLocation()
     const {currentUser , setCurrentUser , status , setStatus} = useAppContext()
     const { socket } = useSocket()
-
+    // console.log(socket);
     const usernameRef = useRef(null)
     const navigate = useNavigate()
 

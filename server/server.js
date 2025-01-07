@@ -24,6 +24,9 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("User connected: " + socket.id);
+  socket.on("join-request",({roomId,username})=>{
+    console.log("UserName : " + username + " with roomId is " + roomId + "connected");
+  })
 });
 
 // Handle "/api/code/execute" route

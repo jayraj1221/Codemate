@@ -1,5 +1,6 @@
 import illustration from "../../assets/illustration.svg"
 import { AppProvider } from "../../context/AppContext";
+import { SocketProvider } from "../../context/SocketContext";
 import FormComponent from "../../forms/FormComponent";
 function Home()
 {
@@ -14,9 +15,11 @@ function Home()
                 />
             </div>
             <div className="flex w-full items-center justify-center sm:w-1/2">
-            <AppProvider>
-                <FormComponent />   
-            </AppProvider>
+                    <AppProvider>
+                        <SocketProvider>
+                            <FormComponent/>   
+                        </SocketProvider>
+                    </AppProvider>
             </div>
         </div>
         {/* <Footer /> */}

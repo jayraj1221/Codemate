@@ -24,9 +24,9 @@ export const useSocket = () => {
         return context;
 }
 
-const BACKEND_URL = "http://localhost:3001/"
+const BACKEND_URL = "http://localhost:5000/"
 
-const SocketProvider = ({childern}) =>{
+const SocketProvider = ({children}) =>{
     const {
         users,
         setUsers,
@@ -39,7 +39,7 @@ const SocketProvider = ({childern}) =>{
     const socket = useMemo(
         () => 
             io(BACKEND_URL ,{
-                reconnectionAttempts : 2,
+                reconnectionAttempts : 1,
             }),
             []  
     )
@@ -118,7 +118,7 @@ const SocketProvider = ({childern}) =>{
                 socket,
             }}
         >
-            {childern}
+            {children}
         </SocketContext.Provider>
     )
 }
