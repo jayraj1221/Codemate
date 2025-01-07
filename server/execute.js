@@ -1,7 +1,7 @@
 const baseUrl = 'https://judge0-ce.p.rapidapi.com';
 const apiKey = process.env.API_KEY;
 
-async function execute(code) {
+async function execute(code, language_id) {
   const url = `${baseUrl}/submissions?base64_encoded=true&wait=true`;
   let encoded_code = btoa(code);
   const options = {
@@ -12,7 +12,7 @@ async function execute(code) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      language_id: 52,
+      language_id: language_id,
       source_code: encoded_code,
     }),
   };
@@ -28,8 +28,8 @@ async function execute(code) {
   }
 }
 
-async function main(code) {
-  const submissionResult = await execute(code);
+async function main(code, language_id) {
+  const submissionResult = await execute(code, language_id);
   if (submissionResult && submissionResult.token) {
     if (submissionResult.status.id === 3) {
       return { type: 'stdout', output: atob(submissionResult.stdout) };
