@@ -10,17 +10,17 @@ import logo from "../assets/logo.svg"
 
 const FormComponent = () => {
     const location = useLocation()
-    const {currentUser , setCurrentUser , status , setStatus} = useAppContext()
+    const {currentUser , setCurrentUser , status , setStatus , users} = useAppContext()
     const { socket } = useSocket()
-    // console.log(socket);
+    console.log(socket);
     const usernameRef = useRef(null)
     const navigate = useNavigate()
 
     const createNewRoomId = () => {
         const newRoomId = uuidv4()
-        console.log(currentUser)
+        // console.log(currentUser)
         setCurrentUser((prevUser) => ({ ...prevUser, roomId: newRoomId }))
-        console.log("Generated Room Id:", newRoomId)
+        // console.log("Generated Room Id:", newRoomId)
         toast.success("Created a new Room Id")
         usernameRef.current?.focus()
     }    
@@ -78,6 +78,7 @@ const FormComponent = () => {
         if (status === USER_STATUS.JOINED && !isRedirect) {
             const username = currentUser.username
             sessionStorage.setItem("redirect", "true")
+            console.log(users)
             navigate(`/editor/${currentUser.roomId}`, {
                 state: {
                     username,

@@ -27,7 +27,7 @@ export const useAppContext = () =>{
     return context;
 }
 const AppProvider = ({children}) =>{
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([{username:"",roomId:""}]);
     const [currentUser, setCurrentUser] = useState({ username: "", roomId: "" });
     const [status, setStatus] = useState(USER_STATUS.INITIAL);
     return (

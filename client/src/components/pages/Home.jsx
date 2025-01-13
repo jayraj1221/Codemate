@@ -1,9 +1,7 @@
 import illustration from "../../assets/illustration.svg"
-import { AppProvider } from "../../context/AppContext";
-import { SocketProvider } from "../../context/SocketContext";
 import FormComponent from "../../forms/FormComponent";
 function Home()
-{
+{   
     return  (
         <div className="flex min-h-screen flex-col items-center justify-center gap-16 bg-black">
         <div className="my-12 flex h-full min-w-full flex-col items-center justify-evenly sm:flex-row sm:pt-0">
@@ -15,11 +13,7 @@ function Home()
                 />
             </div>
             <div className="flex w-full items-center justify-center sm:w-1/2">
-                    <AppProvider>
-                        <SocketProvider>
-                            <FormComponent/>   
-                        </SocketProvider>
-                    </AppProvider>
+                <FormComponent/>   
             </div>
         </div>
         {/* <Footer /> */}

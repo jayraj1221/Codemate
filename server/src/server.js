@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { SocketEvent, USER_CONNECTION_STATUS } = require('./types');
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
@@ -6,7 +7,6 @@ const path = require("path");
 const express = require("express");
 const { convertToCodeFormat } = require("./util")
 const executeCodeRoutes = require("./routes/execute-routes");
-import { SocketEvent, USER_CONNECTION_STATUS } from './types';
 const app = express();
 const PORT = 5000;
 
@@ -54,7 +54,7 @@ function getUserBySocketId(socketId) {
 }
 
 io.on("connection", (socket) => {
-    console.log("User connected: " + socket.id);
+    // console.log("User connected: " + socket.id);
 
 
     socket.on(SocketEvent.JOIN_REQUEST, ({ roomId, username }) => {
@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
             io.to(socket.id).emit(SocketEvent.USERNAME_EXISTS);
             return;
         }
+        console.log("...............ROOM = " + roomId + " User  = " + username);
         const user = {
             username,
             roomId,
@@ -76,6 +77,7 @@ io.on("connection", (socket) => {
             currentFile: null,
         };
         userSocketMap.push(user);
+        console.log(userSocketMap)
         socket.join(roomId);
         socket.broadcast.to(roomId).emit(SocketEvent.USER_JOINED, { user });
         const users = getUsersInRoom(roomId);
@@ -92,6 +94,7 @@ io.on("connection", (socket) => {
 
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_DISCONNECTED, { user });
 		
+        console.log("USER IS LEAVING .....>" + user.username);
         userSocketMap = userSocketMap.filter((u) => u.socketId !== socket.id);
 		socket.leave(roomId);
 	});
@@ -113,7 +116,16 @@ io.on("connection", (socket) => {
 
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_OFFLINE, { socketId });
 	});
-
+    socket.on(SocketEvent.FILE_UPDATED, (data) => {
+        const {fileId , newContent} = data;
+        const roomId = getRoomId(socket.id)
+        // console.log(newContent)
+		if (!roomId) return
+		socket.broadcast.to(roomId).emit(SocketEvent.FILE_UPDATED, {
+			fileId,
+			newContent,
+		})
+    });
 	socket.on(SocketEvent.USER_ONLINE, ({ socketId }) => {
 
 		userSocketMap = userSocketMap.map((u) => {
@@ -175,5 +187,5 @@ io.on("connection", (socket) => {
 app.use("/api/code", executeCodeRoutes);
 
 server.listen(PORT, () => {
-    console.log("<-----SERVER IS RUNNING----->");
+    console.log(`🚀 Server is live on port ${PORT}! Ready to rock and roll! 🎉`);
 });
