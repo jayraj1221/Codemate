@@ -1,6 +1,12 @@
 // Import the Socket.IO library
 const { Socket } = require("socket.io");
 
+// Enum-like object for user connection status
+const USER_CONNECTION_STATUS = {
+    OFFLINE: "offline",
+    ONLINE: "online"
+}
+
 // Enum-like object for socket events
 const SocketEvent = {
     JOIN_REQUEST: "join-request",
@@ -37,4 +43,5 @@ const SocketContext = {
 module.exports = {
     SocketEvent,
     SocketContext,
+    USER_CONNECTION_STATUS,
 };
