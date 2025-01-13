@@ -3,8 +3,8 @@ const { Socket } = require("socket.io");
 
 // Enum-like object for user connection status
 const USER_CONNECTION_STATUS = {
-    OFFLINE : "offline",
-    ONLINE : "online"
+    OFFLINE: "offline",
+    ONLINE: "online"
 }
 
 // Enum-like object for socket events
@@ -43,5 +43,5 @@ const SocketContext = {
 module.exports = {
     SocketEvent,
     SocketContext,
-    USER_CONNECTION_STATUS
+    USER_CONNECTION_STATUS,
 };
