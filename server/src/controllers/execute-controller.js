@@ -1,4 +1,4 @@
-const { main } = require("../../execute");
+const { main } = require("../execute");
 
 const executeCode = async (req, res) => {
     const code = req.body.code;
