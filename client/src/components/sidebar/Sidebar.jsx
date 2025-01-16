@@ -1,5 +1,5 @@
 import { useAppContext } from "../../context/AppContext";
-
+import SidebarHeader from "./SidebarHeader";
 const Sidebar = () => {
   const { users, currentUser } = useAppContext();
 
@@ -13,13 +13,9 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="h-full bg-slate-100 p-4">
-      <h2 className="font-semibold text-xl mb-4">Users</h2>
+    <div className="h-full bg-rose-100 p-1">
+     <SidebarHeader/>
       <ul>
-        {/* Display currentUser's name */}
-        <li className="p-2 mb-2 bg-green-200 rounded-md">
-          <strong>{currentUser.username}</strong> (You)
-        </li>
         {users.map((user) => (
           <li key={user.id} className="p-2 mb-2 bg-gray-200 rounded-md">
             {user.username}
