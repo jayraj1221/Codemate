@@ -1,4 +1,4 @@
-import illustration from "../../assets/illustration.svg"
+import illustration from "../../assets/output-onlinegiftools.gif"
 import FormComponent from "../../forms/FormComponent";
 function Home()
 {   
