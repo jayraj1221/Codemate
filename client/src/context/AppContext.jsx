@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react"
 import  { USER_CONNECTION_STATUS, USER_STATUS, createRemoteUser, createUser } from "../types/user"
-
+import ACTIVITY_STATE from "../types/activityState"
 const defaultContextValues = {
     users: [],
     setUsers: () => {},
@@ -8,8 +8,8 @@ const defaultContextValues = {
     setCurrentUser: () => {},
     status: USER_STATUS.INITIAL,
     setStatus: () => {},
-    // activityState: ACTIVITY_STATE.IDLE,
-    // setActivityState: () => {},
+    activityState: ACTIVITY_STATE.IDLE,
+    setActivityState: () => {},
     // drawingData: defaultDrawingData,
     // setDrawingData: () => {},
 };
@@ -30,6 +30,9 @@ const AppProvider = ({children}) =>{
     const [users, setUsers] = useState([{username:"",roomId:""}]);
     const [currentUser, setCurrentUser] = useState({ username: "", roomId: "" });
     const [status, setStatus] = useState(USER_STATUS.INITIAL);
+    const [activityState, setActivityState] = useState(
+        ACTIVITY_STATE.CODING,
+    )
     return (
         <AppContext.Provider 
                 value={{
@@ -39,6 +42,8 @@ const AppProvider = ({children}) =>{
                 setCurrentUser,
                 status,
                 setStatus,
+                activityState,
+                setActivityState,
              }}
         >
         {children}

@@ -67,17 +67,19 @@ function Editor() {
     }, []);
 
     return (
-        <CodeMirror
-            onChange={onCodeChange}
-            value={activeFile?.content || "// Start coding here..."}
-            extensions={extensions || []}
-            minHeight="100%"
-            maxWidth="100vw"
-            style={{
-                height: "100vh",
-                position: "relative",
-            }}
-        />
+        <div className="flex w-full flex-col overflow-x-auto md:h-screen">
+            <CodeMirror
+                onChange={onCodeChange}
+                value={activeFile?.content}
+                extensions={extensions || []}
+                minHeight="100%"
+                maxWidth="100vw"
+                style={{
+                    height: "100vh",
+                    position: "relative",
+                }}
+            />
+        </div>
     );
 }
 
