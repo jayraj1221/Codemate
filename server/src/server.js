@@ -179,7 +179,16 @@ io.on("connection", (socket) => {
 		const roomId = user.roomId;
 
 		socket.broadcast.to(roomId).emit(SocketEvent.TYPING_PAUSE, { user });
-	})
+	});
+
+    socket.on(SocketEvent.SEND_MESSAGE, ({ msg }) => {
+        let roomId = getRoomId(socket.id);
+        
+        if(!roomId)
+            return;
+
+        socket.broadcast.to(roomId).emit(SocketEvent.RECEIVE_MESSAGE, {msg});
+    });
 
 });
 

@@ -9,7 +9,7 @@ import {
     useMemo,
 } from "react"
 import { toast } from "react-hot-toast" 
-import { Socket, io } from "socket.io-client"
+import { io } from "socket.io-client"
 import { useAppContext } from "./AppContext"
 
 const SocketContext = createContext(SocketContextType)
