@@ -84,12 +84,20 @@ const SocketProvider = ({children}) =>{
         [setUsers, users],
     )
 
+    const handleUserJoined = useCallback(
+        ({ users }) => {
+            setUsers(users);
+        },
+        [setUsers, users]
+    )
+
     useEffect(() => {
         socket.on("connect_error", handleError)
         socket.on("connect_failed", handleError)
         socket.on(SocketEvent.USERNAME_EXISTS, handleUsernameExist)
         socket.on(SocketEvent.JOIN_ACCEPTED, handleJoiningAccept)
         socket.on(SocketEvent.USER_DISCONNECTED, handleUserLeft)
+        socket.on(SocketEvent.USER_JOINED, handleUserJoined)
         // socket.on(SocketEvent.REQUEST_DRAWING, handleRequestDrawing)
         // socket.on(SocketEvent.SYNC_DRAWING, handleDrawingSync)
 
@@ -109,6 +117,7 @@ const SocketProvider = ({children}) =>{
         // handleRequestDrawing,
         handleUserLeft,
         handleUsernameExist,
+        handleUserJoined,
         setUsers,
         socket,
     ])
