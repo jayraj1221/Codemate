@@ -189,6 +189,11 @@ io.on("connection", (socket) => {
 
         socket.broadcast.to(roomId).emit(SocketEvent.RECEIVE_MESSAGE, {msg});
     });
+    socket.on("fileCreated",(newFile) => {
+        console.log(newFile);
+        let roomId = getRoomId(socket.id);
+        socket.broadcast.to(roomId).emit("fileCreated",newFile)
+    })
 
 });
 

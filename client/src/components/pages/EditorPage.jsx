@@ -1,20 +1,12 @@
-import SplitterComponent from "../SplitterComponent";
-// import ConnectionStatusPage from "@/components/connection/ConnectionStatusPage";
+import SplitterComponent from "../splitter/SplitterComponent";
 import WorkSpace from "../workspace/WorkSpace"
 import Sidebar from "../sidebar/Sidebar";
 import { useAppContext } from "../../context/AppContext";
 import { useSocket } from "../../context/SocketContext";
-// import useFullScreen from "@/hooks/useFullScreen";
-// import useUserActivity from "@/hooks/useUserActivity";
 import { SocketEvent } from "../../types/socket";
-// import { USER_STATUS } from "@/types/user";
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 function EditorPage() {
-    // Listen for user online/offline status
-    // useUserActivity();
-    // Enable fullscreen mode
-    // useFullScreen();
     const navigate = useNavigate();
     const { roomId } = useParams();
     const { status, setCurrentUser, currentUser } = useAppContext();
@@ -43,9 +35,6 @@ function EditorPage() {
         socket,
     ]);
 
-    // if (status === USER_STATUS.CONNECTION_FAILED) {
-    //     return <ConnectionStatusPage />;
-    // }
 
     return (
                 <SplitterComponent>

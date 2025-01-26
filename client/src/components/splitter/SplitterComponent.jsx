@@ -1,5 +1,5 @@
 import Split from "react-split";
-import { useViews } from "../context/ViewContext";
+import { useViews } from "../../context/ViewContext";
 function SplitterComponent({ children }) {
     const { isSidebarOpen } = useViews();
 
