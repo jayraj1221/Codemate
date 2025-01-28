@@ -55,6 +55,7 @@ const FormComponent = () => {
         toast.loading("Joining room...")
         setStatus(USER_STATUS.ATTEMPTING_JOIN)
         socket.emit(SocketEvent.JOIN_REQUEST, currentUser)
+        toast.dismiss();
     }
 
     useEffect(() => {

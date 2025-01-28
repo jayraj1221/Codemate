@@ -66,12 +66,12 @@ const SocketProvider = ({children}) =>{
         ({ user, users }) => {
             setCurrentUser(user)
             setUsers(users)
-            toast.dismiss()
+            // toast.dismiss()
             setStatus(USER_STATUS.JOINED)
 
-            if (users.length > 1) {
-                toast.loading("Syncing data, please wait...")
-            }
+            // if (users.length > 1) {
+            //     toast.loading("Syncing data, please wait...")
+            // } 
         },
         [setCurrentUser, setStatus, setUsers],
     )
@@ -85,10 +85,11 @@ const SocketProvider = ({children}) =>{
     )
 
     const handleUserJoined = useCallback(
-        ({ users }) => {
+        ({ user, users }) => {
             setUsers(users);
+            toast.success(`${user.username} joined the room`)
         },
-        [setUsers, users]
+        [setUsers],
     )
 
     useEffect(() => {
@@ -106,6 +107,7 @@ const SocketProvider = ({children}) =>{
             socket.off("connect_failed")
             socket.off(SocketEvent.USERNAME_EXISTS)
             socket.off(SocketEvent.JOIN_ACCEPTED)
+            socket.off(SocketEvent.USER_JOINED)
             socket.off(SocketEvent.USER_DISCONNECTED)
             // socket.off(SocketEvent.REQUEST_DRAWING)
             // socket.off(SocketEvent.SYNC_DRAWING)
