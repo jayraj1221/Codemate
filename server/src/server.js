@@ -79,10 +79,11 @@ io.on("connection", (socket) => {
         userSocketMap.push(user);
         console.log(userSocketMap)
         socket.join(roomId);
-        // socket.broadcast.to(roomId).emit(SocketEvent.USER_JOINED, { user });
+
         const users = getUsersInRoom(roomId);
+
+        io.to(roomId).emit(SocketEvent.USER_JOINED, { user, users });
         io.to(socket.id).emit(SocketEvent.JOIN_ACCEPTED, { user, users });
-        io.to(roomId).emit(SocketEvent.USER_JOINED, { users });
     });
 
     socket.on("disconnecting", () => {
