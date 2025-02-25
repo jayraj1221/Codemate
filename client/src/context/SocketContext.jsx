@@ -24,7 +24,7 @@ export const useSocket = () => {
         return context;
 }
 
-const BACKEND_URL = "http://localhost:5000/"
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SocketProvider = ({children}) =>{
     const {
@@ -93,8 +93,8 @@ const SocketProvider = ({children}) =>{
     )
 
     useEffect(() => {
-        socket.on("connect_error", handleError)
-        socket.on("connect_failed", handleError)
+        socket.on(SocketEvent.CONNECTTION_ERROR, handleError)
+        socket.on(SocketEvent.CONNECTTION_FAILED, handleError)
         socket.on(SocketEvent.USERNAME_EXISTS, handleUsernameExist)
         socket.on(SocketEvent.JOIN_ACCEPTED, handleJoiningAccept)
         socket.on(SocketEvent.USER_DISCONNECTED, handleUserLeft)
@@ -103,8 +103,8 @@ const SocketProvider = ({children}) =>{
         // socket.on(SocketEvent.SYNC_DRAWING, handleDrawingSync)
 
         return () => {
-            socket.off("connect_error")
-            socket.off("connect_failed")
+            socket.off(SocketEvent.CONNECTTION_ERROR)
+            socket.off(SocketEvent.CONNECTTION_FAILED)
             socket.off(SocketEvent.USERNAME_EXISTS)
             socket.off(SocketEvent.JOIN_ACCEPTED)
             socket.off(SocketEvent.USER_JOINED)

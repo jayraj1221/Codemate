@@ -24,6 +24,8 @@ const SocketEvent = {
     REQUEST_DRAWING: "request-drawing",
     SYNC_DRAWING: "sync-drawing",
     DRAWING_UPDATE: "drawing-update",
+    CONNECTTION_ERROR: "connect_error",
+    CONNECTTION_FAILED: "connect_failed",
 };
 
 const SocketContext = {
