@@ -191,12 +191,34 @@ io.on("connection", (socket) => {
 
         socket.broadcast.to(roomId).emit(SocketEvent.RECEIVE_MESSAGE, {msg});
     });
-    socket.on("fileCreated",(newFile) => {
+    socket.on(SocketEvent.FILE_CREATED,(newFile) => {
         console.log(newFile);
         let roomId = getRoomId(socket.id);
-        socket.broadcast.to(roomId).emit("fileCreated",newFile)
+        socket.broadcast.to(roomId).emit(SocketEvent.FILE_CREATED,newFile)
     })
+    socket.on(SocketEvent.FILE_RENAMED, ({ fileId, newName }) => {
+		const roomId = getRoomId(socket.id)
+		if (!roomId) return
+		socket.broadcast.to(roomId).emit(SocketEvent.FILE_RENAMED, {
+			fileId,
+			newName,
+		})
+	})
+    socket.on(SocketEvent.FILE_DELETED, ({ fileId }) => {
+		const roomId = getRoomId(socket.id)
+		if (!roomId) return
+		socket.broadcast.to(roomId).emit(SocketEvent.FILE_DELETED, { fileId })
+	})
+    socket.on("drawing-update", (elements) => {
+        const roomId = getRoomId(socket.id);
+        if (!roomId) return; // Ensure socket is in a valid room
 
+        console.log(`Drawing update received from ${socket.id} for room ${roomId}` + elements);
+        
+        // Broadcast only to users in the same room
+        socket.broadcast.to(roomId).emit("drawing-update", elements);
+    });
+    
 });
 
 // Handle "/api/code/execute" route
