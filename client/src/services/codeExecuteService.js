@@ -9,7 +9,7 @@ class CodeExecuteService
         try
         {
             response = await fetch(
-                url + "api/code/languages",
+                this.url + "api/code/languages",
                 {
                     method: "GET"
                 }
@@ -20,6 +20,7 @@ class CodeExecuteService
             console.log(err);
         }
 
+        // will get result array of objects containing [{ id, name }]
         return (await response.json());
     }
 
@@ -29,7 +30,7 @@ class CodeExecuteService
         try
         {
             response = await fetch(
-                url + "api/code/execute",
+                this.url + "api/code/execute",
                 {
                     method: "POST",
                     headers: {
