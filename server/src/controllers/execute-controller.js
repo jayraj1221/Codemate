@@ -3,6 +3,7 @@ const { main } = require("../execute");
 const executeCode = async (req, res) => {
     const code = req.body.code;
     const language_id = req.body.language_id;
+    const stdin = req.body.stdin;
 
     if (!code) {
         return res.status(400).json({ error: "Code is required" });
@@ -10,7 +11,7 @@ const executeCode = async (req, res) => {
 
     try {
         console.log("Executing code...");
-        const { type, output } = await main(code, language_id);
+        const { type, output } = await main(code, language_id, stdin);
 
         if (type === 'stdout') {
             res.status(200).json({ success: true, output });

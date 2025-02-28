@@ -9,7 +9,7 @@ class CodeExecuteService
         try
         {
             response = await fetch(
-                url + "api/code/languages",
+                this.url + "api/code/languages",
                 {
                     method: "GET"
                 }
@@ -20,16 +20,17 @@ class CodeExecuteService
             console.log(err);
         }
 
+        // will get result array of objects containing [{ id, name }]
         return (await response.json());
     }
 
-    async executeCode(currentFileCode, languageId)
+    async executeCode(currentFileCode, languageId, stdin)
     {
         let response;
         try
         {
             response = await fetch(
-                url + "api/code/execute",
+                this.url + "api/code/execute",
                 {
                     method: "POST",
                     headers: {
@@ -37,7 +38,8 @@ class CodeExecuteService
                     },
                     body: JSON.stringify({
                         code: currentFileCode,
-                        language_id: languageId
+                        language_id: languageId,
+                        stdin: stdin
                     })
                 }
             );
