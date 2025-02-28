@@ -49,6 +49,16 @@ const RunView = () => {
         <FaCaretDown className="absolute right-4 top-3 text-gray-400" size={16} />
       </div>
 
+      {/* Input Textarea */}
+      <div className="w-full">
+        <label className="text-gray-400 text-sm">Standard Input:</label>
+        <textarea
+          className="mt-2 w-full h-24 rounded-lg border border-gray-700 bg-gray-800 p-3 text-white font-mono text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          placeholder="Enter input data..."
+          onChange={(e) => setInput(e.target.value)}
+        />
+      </div>
+      
       {/* Run Button */}
       <button
         className="w-full rounded-lg bg-blue-600 px-4 py-2 font-bold text-white transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"

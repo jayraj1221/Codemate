@@ -7,7 +7,11 @@ const FileSystemContext = createContext();
 export const FileSystemProvider = ({ children }) => {
   const [files, setFiles] = useState([]);
   const [openFiles, setOpenFiles] = useState([]);
-  const [activeFile, setActiveFile] = useState(null);
+  const [activeFile, setActiveFile] = useState({
+    id: Date.now.toString(),
+    name: "index.cpp",
+    content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
+  });
   const { socket } = useSocket();
 
 
@@ -122,9 +126,9 @@ export const FileSystemProvider = ({ children }) => {
         );
       }
 
-      // Set the active file to null if it's the file being deleted
+      // Set the active file to first file from open files if it's the file being deleted
       if (activeFile?.id === fileId) {
-        setActiveFile(null);
+        setActiveFile(openFiles[0]);
       }
 
       if (!sendToSocket) return;

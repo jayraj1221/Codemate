@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CodeExecuteService from "../services/codeExecuteService";
 import langMap from "lang-map";
+import { useFileSystem } from "./FileContext";
 
 const ExecuteCodeContext = createContext(null)
 
@@ -26,10 +27,12 @@ const ExecuteCodeContextProvider = ({children}) => {
         name: "",
     });
 
-    const activeFile = {
-        name: "main.cpp",
-        content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
-    }
+    // file contains id, name, content
+    const { activeFile } = useFileSystem();
+    // const activeFile = {
+    //     name: "main.cpp",
+    //     content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
+    // }
 
     const codeExecuteService = new CodeExecuteService();
 
@@ -98,7 +101,7 @@ const ExecuteCodeContextProvider = ({children}) => {
 
             setIsRunning(true);
 
-            const res = await codeExecuteService.executeCode(activeFile.content, selectedLanguage.id);
+            const res = await codeExecuteService.executeCode(activeFile.content, selectedLanguage.id, input);
 
             if(res.success)
             {

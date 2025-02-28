@@ -24,7 +24,7 @@ class CodeExecuteService
         return (await response.json());
     }
 
-    async executeCode(currentFileCode, languageId)
+    async executeCode(currentFileCode, languageId, stdin)
     {
         let response;
         try
@@ -38,7 +38,8 @@ class CodeExecuteService
                     },
                     body: JSON.stringify({
                         code: currentFileCode,
-                        language_id: languageId
+                        language_id: languageId,
+                        stdin: stdin
                     })
                 }
             );
