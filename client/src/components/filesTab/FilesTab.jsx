@@ -1,8 +1,7 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
 import { FaTimes, FaPlus, FaGripVertical, FaChevronLeft, FaChevronRight, FaFileCode, FaFile, FaFileAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { useFileSystem } from "../../context/FileContext";
 
 const getFileIcon = (type) => {
   switch (type) {
@@ -20,11 +19,9 @@ const getFileIcon = (type) => {
 };
 
 export default function FilesTab() {
-  const [files, setFiles] = useState([
-    { id: "1", title: "index.js", type: "tsx" },
-  ]);
+  const { openFiles, setActiveFile, setOpenFiles, activeFile } = useFileSystem();
   const [showScrollButtons, setShowScrollButtons] = useState(false);
-  const [activeFileId, setActiveFileId] = useState("1");
+  const [activeFileId, setActiveFileId] = useState(activeFile?.id || null);
   const scrollContainerRef = useRef(null);
   const [draggedFileId, setDraggedFileId] = useState(null);
 
@@ -41,6 +38,10 @@ export default function FilesTab() {
     return () => window.removeEventListener("resize", checkScroll);
   }, []);
 
+  useEffect(() => {
+    setActiveFileId(activeFile?.id || null);
+  }, [activeFile]);
+
   const handleScroll = (direction) => {
     if (scrollContainerRef.current) {
       const scrollAmount = 200;
@@ -55,10 +56,13 @@ export default function FilesTab() {
 
   const closeFile = (fileId, event) => {
     event?.stopPropagation();
-    const newFiles = files.filter((file) => file.id !== fileId);
-    setFiles(newFiles);
+    const newFiles = openFiles.filter((file) => file.id !== fileId);
+    setOpenFiles(newFiles);
+
     if (activeFileId === fileId && newFiles.length > 0) {
-      setActiveFileId(newFiles[0].id);
+      setActiveFile(newFiles[0]);
+    } else if (newFiles.length === 0) {
+      setActiveFile(null);
     }
   };
 
@@ -75,26 +79,27 @@ export default function FilesTab() {
     e.preventDefault();
     if (!draggedFileId) return;
 
-    const draggedIndex = files.findIndex((file) => file.id === draggedFileId);
-    const targetIndex = files.findIndex((file) => file.id === targetFileId);
+    const draggedIndex = openFiles.findIndex((file) => file.id === draggedFileId);
+    const targetIndex = openFiles.findIndex((file) => file.id === targetFileId);
 
     if (draggedIndex === targetIndex) return;
 
-    const newFiles = [...files];
+    const newFiles = [...openFiles];
     const [draggedFile] = newFiles.splice(draggedIndex, 1);
     newFiles.splice(targetIndex, 0, draggedFile);
 
-    setFiles(newFiles);
+    setOpenFiles(newFiles);
   };
 
   const addNewFile = () => {
     const newFile = {
-      id: `${files.length + 1}`,
-      title: `newfile${files.length + 1}.ts`,
+      id: `${openFiles.length + 1}`,
+      name: `newfile${openFiles.length + 1}.ts`,
       type: "ts",
+      content: "defalut",
     };
-    setFiles([...files, newFile]);
-    setActiveFileId(newFile.id);
+    setOpenFiles([...openFiles, newFile]);
+    setActiveFile(newFile);
   };
 
   return (
@@ -116,7 +121,7 @@ export default function FilesTab() {
         >
           <div className="flex space-x-1 p-2 min-w-max">
             <AnimatePresence initial={false}>
-              {files.map((file) => (
+              {openFiles.map((file) => (
                 <motion.div
                   key={file.id}
                   layout
@@ -128,7 +133,9 @@ export default function FilesTab() {
                   onDragStart={(e) => handleDragStart(e, file.id)}
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, file.id)}
-                  onClick={() => setActiveFileId(file.id)}
+                  onClick={() => {
+                    setActiveFile(file)
+                  }}
                   className={`group flex items-center px-3 py-2 cursor-pointer select-none transition-all duration-200 ease-in-out rounded-t-lg border-t border-l border-r border-transparent hover:border-gray-700 hover:bg-gray-800 ${
                     activeFileId === file.id
                       ? "bg-gray-800 text-white border-gray-700 border-b-transparent"
@@ -137,7 +144,7 @@ export default function FilesTab() {
                 >
                   <div className="flex items-center space-x-2">
                     {getFileIcon(file.type)}
-                    <span className="text-sm font-medium">{file.title}</span>
+                    <span className="text-sm font-medium">{file.name}</span>
                   </div>
                   <button
                     onClick={(e) => closeFile(file.id, e)}
