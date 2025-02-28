@@ -1,12 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useFileSystem } from "../context/FileContext";
+import {
+  FaFileAlt, FaJs, FaHtml5, FaCss3Alt, FaPython, FaJava, FaFileCode, FaFilePdf, FaFileWord, FaFileExcel,
+} from "react-icons/fa";
+const getFileIcon = (fileName) => {
+  const ext = fileName.split(".").pop().toLowerCase();
 
+  const icons = {
+    js: <FaJs className="text-yellow-500" />,
+    html: <FaHtml5 className="text-orange-600" />,
+    css: <FaCss3Alt className="text-blue-500" />,
+    py: <FaPython className="text-blue-400" />,
+    java: <FaJava className="text-red-500" />,
+    cpp: <FaFileCode className="text-indigo-500" />,
+    c: <FaFileCode className="text-indigo-500" />,
+    txt: <FaFileAlt className="text-gray-500" />,
+    pdf: <FaFilePdf className="text-red-600" />,
+    doc: <FaFileWord className="text-blue-600" />,
+    docx: <FaFileWord className="text-blue-600" />,
+    xls: <FaFileExcel className="text-green-600" />,
+    xlsx: <FaFileExcel className="text-green-600" />,
+    default: <FaFileAlt className="text-gray-500" />,
+  };
+
+  return icons[ext] || icons["default"];
+};
 const FileList = () => {
   const { files, setActiveFile, setOpenFiles, renameFile, deleteFile } = useFileSystem();
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, fileId: null });
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false); // State for delete modal visibility
-  const [fileToDelete, setFileToDelete] = useState(null); // File to delete
-
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState(null);
+  
   const handleContextMenu = (e, fileId) => {
     e.preventDefault();
     setContextMenu({
@@ -22,71 +46,74 @@ const FileList = () => {
     if (newName) {
       renameFile(fileId, newName);
     }
-    setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
+    setContextMenu({ visible: false });
   };
 
   const handleDeleteClick = (fileId) => {
-    setFileToDelete(fileId); // Store the file ID to be deleted
-    setDeleteModalVisible(true); // Show the delete confirmation modal
-    setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
+    setFileToDelete(fileId);
+    setDeleteModalVisible(true);
+    setContextMenu({ visible: false });
   };
 
   const confirmDelete = () => {
     if (fileToDelete) {
       deleteFile(fileToDelete);
-      setFileToDelete(null); // Clear the file to delete
-      setDeleteModalVisible(false); // Hide the delete confirmation modal
+      setFileToDelete(null);
+      setDeleteModalVisible(false);
     }
   };
 
   const cancelDelete = () => {
-    setFileToDelete(null); // Clear the file to delete
-    setDeleteModalVisible(false); // Hide the delete confirmation modal
+    setFileToDelete(null);
+    setDeleteModalVisible(false);
   };
 
   // Close context menu when clicking outside
   useEffect(() => {
-    const closeMenu = () => setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
+    const closeMenu = () => setContextMenu({ visible: false });
     document.addEventListener("click", closeMenu);
     return () => document.removeEventListener("click", closeMenu);
   }, []);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Files</h2>
-      <ul className="space-y-3">
-        {files.map((file) => (
-          <li
-            key={file.id}
-            onClick={() => {
-              setActiveFile(file);
-              setOpenFiles((prevFiles) => {
-                const fileExists = prevFiles.some((openFile) => openFile.id === file.id);
-                return fileExists ? prevFiles : [...prevFiles, file];
-              });
-            }}
-            onContextMenu={(e) => handleContextMenu(e, file.id)}
-            className="p-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition-colors duration-200 ease-in-out"
-          >
-            <span className="text-gray-700 text-lg font-medium">{file.name}</span>
-          </li>
-        ))}
-      </ul>
+    <div className="h-screen w-full bg-white shadow-lg border-r border-gray-300">
+      {/* <h2 className="px-4 py-3 text-lg font-semibold text-gray-800 border-b">Explorer</h2> */}
+      <ul className="py-2 max-h-[calc(100vh-100px)] overflow-y-auto">
+    {files.map((file) => (
+      <li
+        key={file.id}
+        onClick={() => {
+          setActiveFile(file);
+          setOpenFiles((prevFiles) =>
+            prevFiles.some((openFile) => openFile.id === file.id)
+              ? prevFiles
+              : [...prevFiles, file]
+          );
+        }}
+        onContextMenu={(e) => handleContextMenu(e, file.id)}
+        className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 transition cursor-pointer"
+      >
+        {getFileIcon(file.name)}
+        <span className="ml-2 text-sm">{file.name}</span>
+      </li>
+    ))}
+  </ul>
 
+      {/* Context Menu */}
       {contextMenu.visible && (
         <div
-          className="fixed bg-white shadow-lg rounded-md py-2 min-w-[150px] z-50"
-          style={{ top: contextMenu.y, left: contextMenu.x }}
+          className="fixed bg-white shadow-md rounded-md py-1 border border-gray-200 z-50"
+          style={{ top: contextMenu.y, left: contextMenu.x, minWidth: "150px" }}
         >
           <button
-            className="w-full px-4 py-2 text-left hover:bg-gray-100"
+            className="w-full text-left px-4 py-2 hover:bg-gray-100"
             onClick={() => handleRename(contextMenu.fileId)}
           >
             Rename
           </button>
           <button
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 text-red-600"
-            onClick={() => handleDeleteClick(contextMenu.fileId)} // Trigger modal
+            className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+            onClick={() => handleDeleteClick(contextMenu.fileId)}
           >
             Delete
           </button>

@@ -5,8 +5,16 @@ import { SocketEvent } from "../types/socket";
 const FileSystemContext = createContext();
 
 export const FileSystemProvider = ({ children }) => {
-  const [files, setFiles] = useState([]);
-  const [openFiles, setOpenFiles] = useState([]);
+  const [files, setFiles] = useState([{
+    id: Date.now.toString(),
+    name: "index.cpp",
+    content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
+  }]);
+  const [openFiles, setOpenFiles] = useState([{
+    id: Date.now.toString(),
+    name: "index.cpp",
+    content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
+  }]);
   const [activeFile, setActiveFile] = useState({
     id: Date.now.toString(),
     name: "index.cpp",

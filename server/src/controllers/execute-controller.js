@@ -1,5 +1,5 @@
+require("dotenv").config()
 const { main } = require("../execute");
-
 const executeCode = async (req, res) => {
     const code = req.body.code;
     const language_id = req.body.language_id;
@@ -34,9 +34,10 @@ function cmp(a, b)
 const getLanguages = async (req, res) => {
 
     const baseUrl = 'https://judge0-ce.p.rapidapi.com';
-    const apiKey = process.env.API_KEY;
+    // const apiKey = process.env.API_KEY;
+    const apiKey = '9ca6e813f8msh2369d4f279cd875p1086f7jsn9e6b171bc3f8';
 
-    console.log(apiKey);
+    console.log("THIS IS API : " + apiKey);
     // console.log(req);
 
     const options = {

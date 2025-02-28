@@ -1,6 +1,6 @@
 class CodeExecuteService
 {
-    url = import.meta.env.VITE_BACKEND_URL;
+    url = "http://localhost:5000/";
 
     async getSupportedLanguages()
     {
@@ -21,6 +21,7 @@ class CodeExecuteService
         }
 
         // will get result array of objects containing [{ id, name }]
+        console.log(response)
         return (await response.json());
     }
 
