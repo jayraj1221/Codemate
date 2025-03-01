@@ -25,61 +25,87 @@ const RunView = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-6 bg-gray-900 rounded-lg shadow-lg w-full max-w-lg">
-      <h1 className="text-xl font-semibold text-white">Run Code</h1>
+    <div className="flex flex-col h-full bg-white p-4 space-y-5 border-black border-4 rounded-3xl">
+      <h1 className="text-2xl font-bold text-gray-800">Code Runner</h1>
 
-      {/* Language Dropdown */}
-      <div className="relative w-full">
-        <select
-          className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white outline-none focus:ring-2 focus:ring-blue-500"
-          value={JSON.stringify(selectedLanguage)}
-          onChange={handleLngChange}
-        >
-            <option className="text-white">
-                Select a Language
+      {/* Language Selector */}
+      <div className="w-full">
+        <label className="block text-sm font-medium text-gray-600 mb-2">
+          Programming Language
+        </label>
+        <div className="relative">
+          <select
+            className="w-full bg-white border-2 border-gray-200 rounded-xl py-2.5 pl-4 pr-8 
+                      appearance-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 
+                      transition-all duration-200 hover:border-gray-300 cursor-pointer"
+            value={JSON.stringify(selectedLanguage)}
+            onChange={handleLngChange}
+          >
+            <option value="" className="text-gray-400">
+              Select Language
             </option>
             {supportedLanguages
-                .sort((a, b) => (a.name > b.name ? 1 : -1))
-                .map((l, i) => (
-                <option key={i} value={JSON.stringify(l)} className="text-white">
-                    {l.name}
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((l, i) => (
+                <option key={i} value={JSON.stringify(l)} className="text-gray-800">
+                  {l.name}
                 </option>
-            ))}
-        </select>
-        <FaCaretDown className="absolute right-4 top-3 text-gray-400" size={16} />
+              ))}
+          </select>
+          <FaCaretDown className="absolute right-4 top-3.5 text-gray-500" />
+        </div>
       </div>
 
-      {/* Input Textarea */}
-      <div className="w-full">
-        <label className="text-gray-400 text-sm">Standard Input:</label>
+      {/* Input Section */}
+      <div className="flex-1 flex flex-col">
+        <label className="block text-sm font-medium text-gray-600 mb-2">
+          Standard Input
+        </label>
         <textarea
-          className="mt-2 w-full h-24 rounded-lg border border-gray-700 bg-gray-800 p-3 text-white font-mono text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-          placeholder="Enter input data..."
+          className="w-full flex-1 bg-gray-50 border-2 border-gray-200 rounded-xl p-4 
+                    font-mono text-sm focus:border-black focus:ring-2 focus:ring-blue-200 
+                    resize-none transition-all duration-200 placeholder:text-gray-400"
+          placeholder="Enter input here..."
           onChange={(e) => setInput(e.target.value)}
         />
       </div>
-      
+
       {/* Run Button */}
       <button
-        className="w-full rounded-lg bg-blue-600 px-4 py-2 font-bold text-white transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full bg-black text-white py-3 rounded-xl font-semibold 
+                  hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed 
+                  transition-all duration-200 transform hover:scale-[1.01] shadow-sm"
         onClick={executeCode}
         disabled={isRunning}
       >
-        {isRunning ? "Running..." : "Run"}
+        {isRunning ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="animate-pulse">⚡</span> Executing...
+          </span>
+        ) : (
+          "Run Code"
+        )}
       </button>
 
       {/* Output Section */}
-      <div className="w-full">
-        <div className="flex justify-between items-center text-gray-400 text-sm">
-          <span>Output:</span>
-          <button onClick={copyOutput} className="hover:text-white transition">
-            <IoCopyOutline size={18} />
+      <div className="flex-1 flex flex-col">
+        <div className="flex justify-between items-center mb-2">
+          <label className="text-sm font-medium text-gray-600">Output</label>
+          <button 
+            onClick={copyOutput}
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors text-gray-600 
+                      hover:text-gray-800 tooltip"
+            data-tip="Copy Output"
+          >
+            <IoCopyOutline className="w-5 h-5" />
           </button>
         </div>
-        <div className="mt-2 h-40 w-full overflow-y-auto rounded-lg bg-gray-800 p-3 text-white font-mono text-sm border border-gray-700">
-          <code>
-            <pre className="whitespace-pre-wrap">{output || "// Output will appear here..."}</pre>
-          </code>
+        <div className="relative flex-1 bg-gray-50 border-2 border-gray-200 rounded-xl 
+                      overflow-hidden has-[pre]:p-4">
+          <pre className="absolute inset-0 overflow-auto font-mono text-sm 
+                        whitespace-pre-wrap text-gray-800">
+            {output || "// Your program output will appear here..."}
+          </pre>
         </div>
       </div>
     </div>

@@ -76,7 +76,7 @@ const FileList = () => {
   }, []);
 
   return (
-    <div className="h-screen w-full bg-white shadow-lg border-r border-gray-300">
+    <div className="h-screen w-full bg-gray-100 shadow-lg border-r">
       {/* <h2 className="px-4 py-3 text-lg font-semibold text-gray-800 border-b">Explorer</h2> */}
       <ul className="py-2 max-h-[calc(100vh-100px)] overflow-y-auto">
     {files.map((file) => (

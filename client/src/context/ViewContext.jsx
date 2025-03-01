@@ -39,10 +39,10 @@ const ViewProvider = ({children}) => {
         [VIEW.CHATS]:<ChatView/>,
     })
     const [viewIcons] = useState({
-        [VIEW.FILES]:<LuFiles size={30}/>,
-        [VIEW.CLIENTS]:<FaUserFriends size={30}/>,
-        [VIEW.CHATS]:<MdChatBubbleOutline size={30}/>,
-        [VIEW.RUN]:<FaPlay size={28}/>,
+        [VIEW.FILES]:<LuFiles size={40}/>,
+        [VIEW.CLIENTS]:<FaUserFriends size={40}/>,
+        [VIEW.CHATS]:<MdChatBubbleOutline size={40}/>,
+        [VIEW.RUN]:<FaPlay size={38}/>,
     })
 
     return (

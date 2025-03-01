@@ -2,20 +2,30 @@ import { useState, useRef, useEffect } from "react";
 import { FaTimes, FaPlus, FaGripVertical, FaChevronLeft, FaChevronRight, FaFileCode, FaFile, FaFileAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useFileSystem } from "../../context/FileContext";
+import {
+   FaJs, FaHtml5, FaCss3Alt, FaPython, FaJava, FaFilePdf, FaFileWord, FaFileExcel,
+} from "react-icons/fa";
+const getFileIcon = (fileName) => {
+  const ext = fileName.split(".").pop().toLowerCase();
 
-const getFileIcon = (type) => {
-  switch (type) {
-    case "tsx":
-    case "ts":
-      return <FaFileCode className="w-4 h-4" />;
-    case "css":
-      return <FaFile className="w-4 h-4" />;
-    case "json":
-    case "d.ts":
-      return <FaFileAlt className="w-4 h-4" />;
-    default:
-      return <FaFile className="w-4 h-4" />;
-  }
+  const icons = {
+    js: <FaJs className="text-yellow-500" />,
+    html: <FaHtml5 className="text-orange-600" />,
+    css: <FaCss3Alt className="text-blue-500" />,
+    py: <FaPython className="text-blue-400" />,
+    java: <FaJava className="text-red-500" />,
+    cpp: <FaFileCode className="text-indigo-500" />,
+    c: <FaFileCode className="text-indigo-500" />,
+    txt: <FaFileAlt className="text-gray-500" />,
+    pdf: <FaFilePdf className="text-red-600" />,
+    doc: <FaFileWord className="text-blue-600" />,
+    docx: <FaFileWord className="text-blue-600" />,
+    xls: <FaFileExcel className="text-green-600" />,
+    xlsx: <FaFileExcel className="text-green-600" />,
+    default: <FaFileAlt className="text-gray-500" />,
+  };
+
+  return icons[ext] || icons["default"];
 };
 
 export default function FilesTab() {
@@ -90,20 +100,8 @@ export default function FilesTab() {
 
     setOpenFiles(newFiles);
   };
-
-  const addNewFile = () => {
-    const newFile = {
-      id: `${openFiles.length + 1}`,
-      name: `newfile${openFiles.length + 1}.ts`,
-      type: "ts",
-      content: "defalut",
-    };
-    setOpenFiles([...openFiles, newFile]);
-    setActiveFile(newFile);
-  };
-
   return (
-    <div className="w-full bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden m-2">
       <div className="relative flex items-center">
         {showScrollButtons && (
           <button
@@ -143,7 +141,7 @@ export default function FilesTab() {
                   }`}
                 >
                   <div className="flex items-center space-x-2">
-                    {getFileIcon(file.type)}
+                    {getFileIcon(file.name)}
                     <span className="text-sm font-medium">{file.name}</span>
                   </div>
                   <button
@@ -156,14 +154,6 @@ export default function FilesTab() {
                 </motion.div>
               ))}
             </AnimatePresence>
-            <motion.button
-              onClick={addNewFile}
-              className="flex items-center px-3 py-2 text-gray-400 hover:text-white transition-colors duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaPlus className="w-4 h-4" />
-            </motion.button>
           </div>
         </div>
 

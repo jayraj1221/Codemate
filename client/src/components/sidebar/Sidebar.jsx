@@ -34,10 +34,10 @@ const Sidebar = () => {
     }
 }
   return (
-    <aside className="flex w-full md:h-full md:max-h-full md:min-h-full md:w-auto">
+    <aside className="flex w-full md:h-full md:max-h-full md:min-h-full md:w-auto ">
     <div
         className={
-            "fixed bottom-0 left-0 z-50 flex h-[50px] w-full gap-4 self-end overflow-hidden border-t border-darkHover bg-dark p-2 md:static md:h-full md:w-[50px] md:min-w-[50px] md:flex-col md:border-r md:border-t-0 md:p-2 md:pt-4"
+            "fixed bottom-0 left-0 z-50 flex h-[50px] w-full gap-8 self-end overflow-hidden border-t border-darkHover bg-dark p-2 md:static md:h-full md:w-[50px] md:min-w-[50px] md:flex-col md:border-r md:border-t-0 md:p-2 md:pt-4 rounded"
       
         }>
         <SidebarButton
@@ -69,9 +69,9 @@ const Sidebar = () => {
                         : "Switch to Coding Mode"
             }>
                 {activityState === ACTIVITY_STATE.CODING ? (
-                    <MdOutlineDraw size={30} />
+                    <MdOutlineDraw size={40} />
                 ) : (
-                    <IoCodeSlash size={30} />
+                    <IoCodeSlash size={40} />
                 )}
             </button>
             {showTooltip && (
@@ -89,12 +89,15 @@ const Sidebar = () => {
         </div>
     </div>
     <div
-        className="absolute left-0 top-0 z-20 w-full flex-col bg-dark md:static md:min-w-[300px]"
-        style={isSidebarOpen ? {} : { display: "none" }}
+    className={`absolute left-0 top-0 w-full flex-col bg-dark md:static md:min-w-[300px] m-1 border-black border- 
+        transition-all duration-700 ease-in-out ${
+            isSidebarOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"
+        }`}
     >
-        {/* Render the active view component */}
-        {viewComponents[activeView]}
-    </div>
+    {/* Render the active view component */}
+    {viewComponents[activeView]}
+  </div>
+
 </aside>
   )
 };

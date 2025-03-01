@@ -41,6 +41,7 @@ const ExecuteCodeContextProvider = ({children}) => {
             try{
                 const fetchLanguages = await codeExecuteService.getSupportedLanguages();
                 setSupportedLanguages(fetchLanguages.result);
+                // selectedLanguage = activeFile;
             }
             catch(err){
                 console.log(err);
@@ -52,36 +53,30 @@ const ExecuteCodeContextProvider = ({children}) => {
     }, []);
 
     useEffect(() => {
-        if(supportedLanguages.length === 0 || !activeFile.name)
-            return;
-        
+        if (supportedLanguages.length === 0 || !activeFile?.name) return;
+    
         const ext = activeFile.name.split(".").pop();
-
-        if(ext)
-        {
-            const languageName = langMap.languages(ext)[0];
-
-            const language = supportedLanguages.find(
-                (l) => l.name.toLowerCase() === languageName.toLowerCase(),
-            );
-
-            if(language)
-            {
-                setSelectedLanguage({
-                    id: language.id,
-                    name: language.name
-                });
+        if (ext) {
+            const languageNames = langMap.languages(ext); // Returns an array of possible languages
+            if (languageNames && languageNames.length > 0) {
+                const languageName = languageNames[0]; // Pick the first matching language
+    
+                const language = supportedLanguages.find(
+                    (l) => l.name.toLowerCase() === languageName.toLowerCase()
+                );
+    
+                if (language) {
+                    setSelectedLanguage({
+                        id: language.id,
+                        name: language.name,
+                    });
+                }
             }
+        } else {
+            setSelectedLanguage({ id: null, name: "" });
         }
-        else
-        {
-            setSelectedLanguage({
-                id: null,
-                name: "",
-            })
-        }
-
-    }, [activeFile.name, supportedLanguages]);
+    }, [activeFile, supportedLanguages]);
+    
 
     const executeCode = async () => {
         try

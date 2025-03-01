@@ -1,24 +1,36 @@
+"use client";
+
+import { useState } from "react";
 import { useAppContext } from "../../../context/AppContext";
 import { useSocket } from "../../../context/SocketContext";
-import { USER_STATUS } from "../../../types/user";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { IoCopyOutline } from "react-icons/io5";
-import { CiShare1 } from "react-icons/ci";
-import { PiSignOutFill } from "react-icons/pi";
+import { Copy, Share, LogOut } from "lucide-react";
 import Users from "../../common/Users";
 
 const UserView = () => {
   const { setStatus } = useAppContext();
   const { socket } = useSocket();
   const navigate = useNavigate();
+  const [isHovering, setIsHovering] = useState(null);
 
   const copy = async () => {
     const url = window.location.href;
 
     try {
       await navigator.clipboard.writeText(url);
-      toast.success("URL copied...");
+      toast.success("URL copied to clipboard", {
+        style: {
+          border: "1px solid #000",
+          padding: "16px",
+          color: "#000",
+          backgroundColor: "#fff",
+        },
+        iconTheme: {
+          primary: "#000",
+          secondary: "#fff",
+        },
+      });
     } catch (err) {
       toast.error("Could not copy URL");
       console.log(err);
@@ -37,45 +49,60 @@ const UserView = () => {
 
   const leave = () => {
     socket.disconnect();
-    setStatus(USER_STATUS.DISCONNECTED);
-    navigate("/", {
-      replace: true,
-    });
+    setStatus("DISCONNECTED");
+    navigate("/", { replace: true });
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 p-6 rounded-lg shadow-lg h-screen max-w-md mx-auto">
-      <h1 className="text-2xl font-semibold text-gray-800 mt-6 mb-4 text-center">
+    <div className="w-full h-full bg-white text-gray-900 shadow-lg  border-black border-4 rounded-3xl flex flex-col transition-all duration-300 overflow-hidden">
+      <h1 className="text-2xl font-semibold text-black my-6 text-center tracking-tight">
         Connected Users
       </h1>
 
       {/* Scrollable Users Container */}
-      <div className="flex-1 w-full max-w-lg md:max-w-xl overflow-y-auto">
+      <div className="flex-1 w-full max-w-lg md:max-w-xl mx-auto overflow-y-auto px-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
         <Users />
       </div>
 
       {/* Fixed Buttons at Bottom */}
-      <div className="flex gap-4 p-4 justify-center w-full bg-gray-100 md:justify-center">
+      <div className="flex gap-6 p-6 justify-center w-full bg-gray-50 border-t border-gray-200 mt-4">
         <button
           onClick={leave}
+          onMouseEnter={() => setIsHovering("leave")}
+          onMouseLeave={() => setIsHovering(null)}
           title="Leave room"
-          className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600 shadow-md md:w-12 md:h-12 md:flex md:items-center md:justify-center"
+          className="p-3 rounded-full bg-white border border-black text-black hover:bg-black hover:text-white transition-all duration-200 shadow-sm"
         >
-          <PiSignOutFill className="w-6 h-6" />
+          <LogOut
+            className={`w-5 h-5 ${isHovering === "leave" ? "scale-110" : "scale-100"} transition-transform duration-200`}
+          />
+          <span className="sr-only">Leave room</span>
         </button>
+
         <button
           onClick={share}
+          onMouseEnter={() => setIsHovering("share")}
+          onMouseLeave={() => setIsHovering(null)}
           title="Share URL"
-          className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 shadow-md md:w-12 md:h-12 md:flex md:items-center md:justify-center"
+          className="p-3 rounded-full bg-white border border-black text-black hover:bg-black hover:text-white transition-all duration-200 shadow-sm"
         >
-          <CiShare1 className="w-6 h-6" />
+          <Share
+            className={`w-5 h-5 ${isHovering === "share" ? "scale-110" : "scale-100"} transition-transform duration-200`}
+          />
+          <span className="sr-only">Share URL</span>
         </button>
+
         <button
           onClick={copy}
+          onMouseEnter={() => setIsHovering("copy")}
+          onMouseLeave={() => setIsHovering(null)}
           title="Copy URL"
-          className="p-2 rounded-full bg-green-500 text-white hover:bg-green-600 shadow-md md:w-12 md:h-12 md:flex md:items-center md:justify-center"
+          className="p-3 rounded-full bg-white border border-black text-black hover:bg-black hover:text-white transition-all duration-200 shadow-sm"
         >
-          <IoCopyOutline className="w-6 h-6" />
+          <Copy
+            className={`w-5 h-5 ${isHovering === "copy" ? "scale-110" : "scale-100"} transition-transform duration-200`}
+          />
+          <span className="sr-only">Copy URL</span>
         </button>
       </div>
     </div>

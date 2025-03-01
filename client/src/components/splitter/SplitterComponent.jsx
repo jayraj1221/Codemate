@@ -4,7 +4,7 @@ function SplitterComponent({ children }) {
     const { isSidebarOpen } = useViews();
 
     const getSizes = () => {
-        let sizes = [35, 65]
+        let sizes = [25, 75]
         return isSidebarOpen ? sizes : [0, 350]
     }
 

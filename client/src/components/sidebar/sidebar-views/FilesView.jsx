@@ -5,19 +5,19 @@ import FileList from "../../../filesystem/FileList";
 
 const FilesView = () => {
   return (
-    <div className="w-full h-full bg-white text-gray-900 shadow-md border border-gray-300 rounded-2xl flex flex-col">
+    <div className="w-full h-full bg-white text-gray-900 shadow-md border-x-4 border-y-4 border-black rounded-3xl flex flex-col">
       {/* Header Section */}
       <div className="flex justify-between items-center p-4 border-b border-gray-300 rounded-t-2xl">
-        <h2 className="text-lg font-semibold">Files</h2>
+        <h2 className="text-2xl font-semibold">Files</h2>
         <button className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
           <CreateFile />
         </button>
       </div>
 
       {/* File List - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-4">
+      {/* <div className="flex-1 overflow-y-auto p-4 w-full bg-slate-300"> */}
         <FileList />
-      </div>
+      {/* </div> */}
 
       {/* Footer Options */}
       <div className="border-t border-gray-300 p-4 flex flex-col space-y-2 rounded-b-2xl">

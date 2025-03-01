@@ -12,15 +12,15 @@ const WorkSpace = () => {
       {activityState === ACTIVITY_STATE.DRAWING ? (
         <DrawingBoard />
       ) : (
-        <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex flex-col h-screen  border-black  p-2 border-x-[7px] m-4 rounded-3xl">
           {/* Files Tab Section */}
-          <div className="flex-none bg-white dark:bg-gray-800 shadow-md">
+          {/* <div className="flex-none bg-white shadow-md"> */}
             <FilesTab />
-          </div>
+          {/* </div> */}
 
           {/* Editor Section */}
-          <div className="flex-1 overflow-auto p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full overflow-hidden">
+          <div className="flex-1 overflow-auto">
+            <div className="w-full bg-white dark:bg-gray-800 border-gray-400 border-[1px] shadow-lg h-full overflow-hidden rounded-xl">
               <Editor />
             </div>
           </div>
