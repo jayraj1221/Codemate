@@ -1,7 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useSocket } from "./SocketContext";
 import { SocketEvent } from "../types/socket";
-
+import { useAppContext } from "./AppContext"
+import toast from "react-hot-toast";
 const FileSystemContext = createContext();
 
 export const FileSystemProvider = ({ children }) => {
@@ -22,7 +23,9 @@ export const FileSystemProvider = ({ children }) => {
   });
   const { socket } = useSocket();
 
-
+  const {
+          setUsers
+      } = useAppContext()
   const handleFileCreated = (newFile) => {
     setFiles((prevFiles) => [...prevFiles, newFile]);
     setOpenFiles((prevOpenFiles) => [...prevOpenFiles, newFile]);
@@ -158,19 +161,57 @@ export const FileSystemProvider = ({ children }) => {
     },
     [deleteFile]
   );
+
+  const handleUserJoined = useCallback(
+    ({ user }) => {
+      
+      toast.success(`${user.username} joined the room`);
+      
+      socket.emit(SocketEvent.SYNC_FILE_STRUCTURE, {
+        files,
+        openFiles,
+        activeFile,
+        socketId: user.socketId
+      });
+      
+      setUsers((prev) => [...prev, user]);
+    },
+    [activeFile, openFiles, socket, setUsers],
+  );
+
+  const handleSyncFileStructure = useCallback(
+    ({files, openFiles, activeFile}) => {
+      console.log("files: "+files[0].name);
+      console.log("OpenFiles: "+ openFiles[0].name);
+      console.log("ActiveFiles: "+ activeFile.name);
+      setFiles(files);
+      setOpenFiles(openFiles);
+      setActiveFile(activeFile);
+
+      // console.log("After files: "+files);
+      // console.log("After OpenFiles: "+ openFiles);
+      // console.log("AfterActiveFiles: "+ activeFile);
+    },
+    []
+  );
+
   useEffect(() => {
     if (!socket) return;
     socket.on(SocketEvent.FILE_CREATED,handleFileCreated);
     socket.on(SocketEvent.FILE_UPDATED, handleFileUpdate);
     socket.on(SocketEvent.FILE_RENAMED,handleFileRenamed);
     socket.on(SocketEvent.FILE_DELETED,handleFileDeleted);
+    socket.on(SocketEvent.USER_JOINED, handleUserJoined);
+    socket.on(SocketEvent.SYNC_FILE_STRUCTURE, handleSyncFileStructure);
     return () => {
       socket.off(SocketEvent.FILE_CREATED , handleFileCreated);
       socket.off(SocketEvent.FILE_UPDATED, handleFileUpdate);
       socket.off(SocketEvent.FILE_RENAMED , handleFileRenamed);
       socket.off(SocketEvent.FILE_DELETED , handleFileDeleted);
+      socket.off(SocketEvent.USER_JOINED);
+      socket.off(SocketEvent.SYNC_FILE_STRUCTURE);
     };
-  }, [socket, handleFileUpdate]);
+  }, [socket, handleFileUpdate, handleFileCreated, handleFileDeleted, handleFileRenamed, handleSyncFileStructure, handleUserJoined]);
 
   return (
     <FileSystemContext.Provider
