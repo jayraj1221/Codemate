@@ -82,7 +82,8 @@ io.on("connection", (socket) => {
 
         const users = getUsersInRoom(roomId);
 
-        io.to(roomId).emit(SocketEvent.USER_JOINED, { user, users });
+        // io.to(roomId).emit(SocketEvent.USER_JOINED, { user });
+        socket.broadcast.to(roomId).emit(SocketEvent.USER_JOINED, { user });
         io.to(socket.id).emit(SocketEvent.JOIN_ACCEPTED, { user, users });
     });
 
@@ -209,6 +210,12 @@ io.on("connection", (socket) => {
 		if (!roomId) return
 		socket.broadcast.to(roomId).emit(SocketEvent.FILE_DELETED, { fileId })
 	})
+    socket.on(SocketEvent.SYNC_FILE_STRUCTURE, ({files, openFiles, activeFile, socketId}) => {
+        console.log("files: "+ files[0].name);
+        console.log("OpenFiles: "+ openFiles[0].name);
+        console.log("ActiveFiles: "+ activeFile.name);
+        io.to(socketId).emit(SocketEvent.SYNC_FILE_STRUCTURE, { files, openFiles, activeFile });
+    })
     socket.on("drawing-update", (elements) => {
         const roomId = getRoomId(socket.id);
         if (!roomId) return; // Ensure socket is in a valid room

@@ -84,13 +84,13 @@ const SocketProvider = ({children}) =>{
         [setUsers, users],
     )
 
-    const handleUserJoined = useCallback(
-        ({ user, users }) => {
-            setUsers(users);
-            toast.success(`${user.username} joined the room`)
-        },
-        [setUsers],
-    )
+    // const handleUserJoined = useCallback(
+    //     ({ user, users }) => {
+    //         setUsers(users);
+    //         toast.success(`${user.username} joined the room`)
+    //     },
+    //     [setUsers],
+    // )
 
     useEffect(() => {
         socket.on(SocketEvent.CONNECTTION_ERROR, handleError)
@@ -98,7 +98,7 @@ const SocketProvider = ({children}) =>{
         socket.on(SocketEvent.USERNAME_EXISTS, handleUsernameExist)
         socket.on(SocketEvent.JOIN_ACCEPTED, handleJoiningAccept)
         socket.on(SocketEvent.USER_DISCONNECTED, handleUserLeft)
-        socket.on(SocketEvent.USER_JOINED, handleUserJoined)
+        // socket.on(SocketEvent.USER_JOINED, handleUserJoined)
         // socket.on(SocketEvent.REQUEST_DRAWING, handleRequestDrawing)
         // socket.on(SocketEvent.SYNC_DRAWING, handleDrawingSync)
 
@@ -107,7 +107,7 @@ const SocketProvider = ({children}) =>{
             socket.off(SocketEvent.CONNECTTION_FAILED)
             socket.off(SocketEvent.USERNAME_EXISTS)
             socket.off(SocketEvent.JOIN_ACCEPTED)
-            socket.off(SocketEvent.USER_JOINED)
+            // socket.off(SocketEvent.USER_JOINED)
             socket.off(SocketEvent.USER_DISCONNECTED)
             // socket.off(SocketEvent.REQUEST_DRAWING)
             // socket.off(SocketEvent.SYNC_DRAWING)
@@ -119,7 +119,7 @@ const SocketProvider = ({children}) =>{
         // handleRequestDrawing,
         handleUserLeft,
         handleUsernameExist,
-        handleUserJoined,
+        // handleUserJoined,
         setUsers,
         socket,
     ])
