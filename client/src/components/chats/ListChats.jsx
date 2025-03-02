@@ -39,7 +39,7 @@ function ListChats() {
           <div key={idx} className={`flex ${isCurrentUser ? "justify-end" : "justify-start"} animate-fade-in`}>
             <div
               className={`max-w-xs break-words rounded-2xl p-4 text-sm shadow-sm transition-all duration-200 ${
-                isCurrentUser ? "bg-black text-white" : "bg-gray-100 text-gray-900 border border-gray-200"
+                isCurrentUser ? "bg-black text-white" : "bg-gray-300 text-gray-900 border border-gray-200"
               }`}
             >
               <div className="flex justify-between items-center gap-4 mb-1.5">

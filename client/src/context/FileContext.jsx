@@ -181,16 +181,12 @@ export const FileSystemProvider = ({ children }) => {
 
   const handleSyncFileStructure = useCallback(
     ({files, openFiles, activeFile}) => {
-      console.log("files: "+files[0].name);
-      console.log("OpenFiles: "+ openFiles[0].name);
-      console.log("ActiveFiles: "+ activeFile.name);
+      // console.log("files: "+files[0].name);
+      // console.log("OpenFiles: "+ openFiles[0].name);
+      // console.log("ActiveFiles: "+ activeFile.name);
       setFiles(files);
       setOpenFiles(openFiles);
       setActiveFile(activeFile);
-
-      // console.log("After files: "+files);
-      // console.log("After OpenFiles: "+ openFiles);
-      // console.log("AfterActiveFiles: "+ activeFile);
     },
     []
   );

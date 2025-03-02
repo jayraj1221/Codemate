@@ -211,9 +211,9 @@ io.on("connection", (socket) => {
 		socket.broadcast.to(roomId).emit(SocketEvent.FILE_DELETED, { fileId })
 	})
     socket.on(SocketEvent.SYNC_FILE_STRUCTURE, ({files, openFiles, activeFile, socketId}) => {
-        console.log("files: "+ files[0].name);
-        console.log("OpenFiles: "+ openFiles[0].name);
-        console.log("ActiveFiles: "+ activeFile.name);
+        // console.log("files: "+ files[0].name);
+        // console.log("OpenFiles: "+ openFiles[0].name);
+        // console.log("ActiveFiles: "+ activeFile.name);
         io.to(socketId).emit(SocketEvent.SYNC_FILE_STRUCTURE, { files, openFiles, activeFile });
     })
     socket.on("drawing-update", (elements) => {
