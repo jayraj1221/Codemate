@@ -3,6 +3,9 @@ import { useSocket } from "./SocketContext";
 import { SocketEvent } from "../types/socket";
 import { useAppContext } from "./AppContext"
 import toast from "react-hot-toast";
+import JSZip from "jszip";
+import {saveAs} from "file-saver";
+
 const FileSystemContext = createContext();
 
 export const FileSystemProvider = ({ children }) => {
@@ -191,6 +194,64 @@ export const FileSystemProvider = ({ children }) => {
     []
   );
 
+  const downloadFiles = () => {
+    const zip = JSZip();
+
+    // add all files
+    files.forEach(file => {
+      zip.file(file.name, file.content || "");
+    });
+
+    // Download zip file
+    zip.generateAsync({type: "blob"}).then((content) => { saveAs(content, "files.zip") });
+  }
+
+  const openFilesFromStorage = () => {
+    // Create an input element of type file
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true; // Allow multiple files to be selected
+    input.accept = '.txt,.js,.cpp,.c,.py,.html,.css,.json,.ts,.java,.asm,.php,.cs,.h'; // Specify accepted file types (optional)
+  
+    // Trigger the file selection dialog
+    input.click();
+  
+    // Handle file selection
+    input.onchange = (e) => {
+      const selectedFiles = e.target.files;
+  
+      // Read each file and add it to the files state
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const reader = new FileReader();
+  
+        reader.onload = (event) => {
+          const fileContent = event.target.result;
+  
+          // Create a new file object
+          const newFile = {
+            id: Date.now().toString() + i, // Unique ID for each file
+            name: file.name,
+            content: fileContent,
+          };
+  
+          // Add the new file to the files state
+          setFiles((prevFiles) => [...prevFiles, newFile]);
+          setOpenFiles((prevOpenFiles) => [...prevOpenFiles, newFile]);
+          setActiveFile(newFile); // Set the new file as active
+  
+          // Emit the new file to the socket (if needed)
+          if (socket) {
+            socket.emit(SocketEvent.FILE_CREATED, newFile);
+          }
+        };
+  
+        // Read the file as text
+        reader.readAsText(file);
+      }
+    };
+  };
+
   useEffect(() => {
     if (!socket) return;
     socket.on(SocketEvent.FILE_CREATED,handleFileCreated);
@@ -222,6 +283,8 @@ export const FileSystemProvider = ({ children }) => {
         updateFileContent,
         renameFile,
         deleteFile,
+        downloadFiles,
+        openFilesFromStorage,
       }}
     >
       {children}
