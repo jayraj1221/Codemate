@@ -30,7 +30,7 @@ const FileList = () => {
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, fileId: null });
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [fileToDelete, setFileToDelete] = useState(null);
-  
+
   const handleContextMenu = (e, fileId) => {
     e.preventDefault();
     setContextMenu({
@@ -79,25 +79,25 @@ const FileList = () => {
     <div className="h-screen w-full bg-gray-100 shadow-lg border-r">
       {/* <h2 className="px-4 py-3 text-lg font-semibold text-gray-800 border-b">Explorer</h2> */}
       <ul className="py-2 max-h-[calc(100vh-100px)] overflow-y-auto">
-    {files.map((file) => (
-      <li
-        key={file.id}
-        onClick={() => {
-          setActiveFile(file);
-          setOpenFiles((prevFiles) =>
-            prevFiles.some((openFile) => openFile.id === file.id)
-              ? prevFiles
-              : [...prevFiles, file]
-          );
-        }}
-        onContextMenu={(e) => handleContextMenu(e, file.id)}
-        className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 transition cursor-pointer"
-      >
-        {getFileIcon(file.name)}
-        <span className="ml-2 text-sm">{file.name}</span>
-      </li>
-    ))}
-  </ul>
+        {files.map((file) => (
+          <li
+            key={file.id}
+            onClick={() => {
+              setActiveFile(file);
+              setOpenFiles((prevFiles) =>
+                prevFiles.some((openFile) => openFile.id === file.id)
+                  ? prevFiles
+                  : [...prevFiles, file]
+              );
+            }}
+            onContextMenu={(e) => handleContextMenu(e, file.id)}
+            className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 transition cursor-pointer"
+          >
+            {getFileIcon(file.name)}
+            <span className="ml-2 text-sm">{file.name}</span>
+          </li>
+        ))}
+      </ul>
 
       {/* Context Menu */}
       {contextMenu.visible && (
