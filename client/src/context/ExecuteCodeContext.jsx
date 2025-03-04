@@ -29,10 +29,6 @@ const ExecuteCodeContextProvider = ({children}) => {
 
     // file contains id, name, content
     const { activeFile } = useFileSystem();
-    // const activeFile = {
-    //     name: "main.cpp",
-    //     content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
-    // }
 
     const codeExecuteService = new CodeExecuteService();
 
@@ -62,7 +58,7 @@ const ExecuteCodeContextProvider = ({children}) => {
                 const languageName = languageNames[0]; // Pick the first matching language
     
                 const language = supportedLanguages.find(
-                    (l) => l.name.toLowerCase() === languageName.toLowerCase()
+                    (l) => l.name.toLowerCase().includes(languageName.toLowerCase())
                 );
     
                 if (language) {
