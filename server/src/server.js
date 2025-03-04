@@ -5,8 +5,12 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 const path = require("path");
 const express = require("express");
-const { convertToCodeFormat } = require("./util")
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const roomRoutes = require("./routes/roomRoutes");
 const executeCodeRoutes = require("./routes/execute-routes");
+const mongoose = require('mongoose');
+
 const app = express();
 const PORT = 5000;
 
@@ -17,7 +21,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "http://localhost:5173",
     },
     maxHttpBufferSize: 1e8,
     pingTimeout: 60000,
@@ -52,6 +56,21 @@ function getUserBySocketId(socketId) {
     }
     return user;
 }
+
+// io.use((socket, next) => {
+//     const token = socket.handshake.auth.token;
+//     if (!token) {
+//       return next(new Error('Authentication error: Token missing'));
+//     }
+  
+//     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//       if (err) {
+//         return next(new Error('Authentication error: Invalid token'));
+//       }
+//       socket.userId = decoded.id; // Attach user ID to the socket
+//       next();
+//     });
+// });
 
 io.on("connection", (socket) => {
     // console.log("User connected: " + socket.id);
@@ -228,9 +247,27 @@ io.on("connection", (socket) => {
     
 });
 
-// Handle "/api/code/execute" route
+// api routes
 app.use("/api/code", executeCodeRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/room", roomRoutes);
 
-server.listen(PORT, () => {
-    console.log(`🚀 Server is live on port ${PORT}! Ready to rock and roll! 🎉`);
+// Global error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
 });
+
+// mongodb connection
+mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
+{
+    server.listen(PORT, ()=>
+    {
+        console.log(`🚀 Server is live on port ${PORT}! Ready to rock and roll! 🎉`);
+    })
+})
+.catch((err)=>
+{
+    console.log(err);
+})
