@@ -8,7 +8,7 @@ import { ViewProvider } from "./context/ViewContext";
 import { ChatContextProvider } from "./context/ChatContext";
 import { FileSystemProvider } from "./context/FileContext"; // Make sure this is imported
 import { ExecuteCodeContextProvider } from "./context/ExecuteCodeContext";
-
+import LandingPage from "./components/pages/LandingPage/page";
 function App() {
   return (
     <Router>
@@ -19,7 +19,8 @@ function App() {
               <ExecuteCodeContextProvider>
                 <ChatContextProvider>
                     <Routes>
-                      <Route path="/" element={<Home />} />
+                      <Route path='/' element= { <LandingPage/>} />
+                      // <Route path="/homepage" element={<Home />} />
                       <Route path="/editor/:roomId" element={<EditorPage />} />
                     </Routes>
                 </ChatContextProvider>

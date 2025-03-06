@@ -215,86 +215,84 @@ const FormComponent = () => {
   const isJoining = status === USER_STATUS.ATTEMPTING_JOIN
 
   return (
-    <div className="w-full">
-      <form onSubmit={joinRoom} className="w-full flex flex-col gap-5">
-        <div className="space-y-3">
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-20 transition duration-300"></div>
-            <div className="relative">
-              <label htmlFor="roomId" className="block text-sm font-medium text-gray-700 mb-1 ml-1">
-                Room ID
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Users size={18} className="text-gray-400" />
-                </div>
-                <input
-                  id="roomId"
-                  type="text"
-                  name="roomId"
-                  placeholder="Enter Room ID"
-                  className="w-full pl-10 rounded-lg border border-gray-200 bg-gray-50 p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  onChange={handleInputChanges}
-                  value={currentUser.roomId}
-                />
-              </div>
+    <div className="w-full bg-white p-6 rounded-lg shadow-md">
+  <form onSubmit={joinRoom} className="w-full flex flex-col gap-5">
+    <div className="space-y-3">
+      <div className="relative group">
+        <div className="relative">
+          <label htmlFor="roomId" className="block text-sm font-medium text-gray-600 mb-1 ml-1">
+            Room ID
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Users size={18} className="text-gray-500" />
             </div>
-          </div>
-
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-20 transition duration-300"></div>
-            <div className="relative">
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1 ml-1">
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                name="username"
-                placeholder="Enter Username"
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                onChange={handleInputChanges}
-                value={currentUser.username}
-                ref={usernameRef}
-              />
-            </div>
+            <input
+              id="roomId"
+              type="text"
+              name="roomId"
+              placeholder="Enter Room ID"
+              className="w-full pl-10 rounded-lg border border-gray-300 bg-gray-100 p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              onChange={handleInputChanges}
+              value={currentUser.roomId}
+            />
           </div>
         </div>
+      </div>
 
-        <button
-          type="submit"
-          disabled={isJoining}
-          className={`relative mt-2 w-full rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3.5 text-lg font-semibold transition duration-300 hover:from-blue-500 hover:to-purple-500 active:scale-[0.98] overflow-hidden group ${
-            isJoining ? "opacity-80 cursor-not-allowed" : ""
-          }`}
-        >
-          <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 transform bg-white opacity-10 transition-all duration-1000 ease-out group-hover:-translate-x-40"></span>
-          <div className="flex items-center justify-center gap-2">
-            {isJoining ? (
-              <>
-                <RefreshCw size={20} className="animate-spin" />
-                <span>Joining...</span>
-              </>
-            ) : (
-              <>
-                <span>Join Room</span>
-                <ArrowRight size={20} />
-              </>
-            )}
-          </div>
-        </button>
-      </form>
-
-      <div className="mt-6 flex justify-center">
-        <button
-          className="group flex items-center gap-2 text-sm font-medium text-blue-600 transition duration-300 hover:text-purple-600"
-          onClick={createNewRoomId}
-        >
-          <RefreshCw size={16} className="group-hover:rotate-180 transition-transform duration-500" />
-          <span className="underline-offset-4 hover:underline">Generate Unique Room ID</span>
-        </button>
+      <div className="relative group">
+        <div className="relative">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1 ml-1">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            placeholder="Enter Username"
+            className="w-full rounded-lg border border-gray-300 bg-gray-100 p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            onChange={handleInputChanges}
+            value={currentUser.username}
+            ref={usernameRef}
+          />
+        </div>
       </div>
     </div>
+
+    <button
+      type="submit"
+      disabled={isJoining}
+      className={`relative mt-2 w-full rounded-lg bg-blue-600 text-white px-6 py-3.5 text-lg font-semibold transition duration-300 hover:bg-blue-500 active:scale-[0.98] ${
+        isJoining ? "opacity-80 cursor-not-allowed" : ""
+      }`}
+    >
+      <div className="flex items-center justify-center gap-2">
+        {isJoining ? (
+          <>
+            <RefreshCw size={20} className="animate-spin" />
+            <span>Joining...</span>
+          </>
+        ) : (
+          <>
+            <span>Join Room</span>
+            <ArrowRight size={20} />
+          </>
+        )}
+      </div>
+    </button>
+  </form>
+
+  <div className="mt-6 flex justify-center">
+    <button
+      className="flex items-center gap-2 text-sm font-medium text-blue-600 transition duration-300 hover:text-blue-700"
+      onClick={createNewRoomId}
+    >
+      <RefreshCw size={16} className="transition-transform duration-500 group-hover:rotate-180" />
+      <span className="underline-offset-4 hover:underline">Generate Unique Room ID</span>
+    </button>
+  </div>
+</div>
+
   )
 }
 
