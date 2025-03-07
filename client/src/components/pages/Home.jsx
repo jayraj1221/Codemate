@@ -12,9 +12,9 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex w-full max-w-6xl flex-col-reverse items-center justify-between gap-12 px-6 py-12 sm:flex-row sm:px-16">
+      <div className="relative z-10 flex w-full max-w-6xl flex-col-reverse items-center justify-center gap-12 px-6 py-12 sm:flex-row sm:px-16">
         {/* Left Section - Illustration */}
-        <div className="flex w-full justify-center sm:w-1/2">
+        {/* <div className="flex w-full justify-center sm:w-1/2">
           <div className="relative">
             <img
               src={codeIllustration || "/placeholder.svg"}
@@ -22,7 +22,7 @@ export default function Home() {
               className="relative w-[280px] sm:w-[420px] rounded-2xl drop-shadow-lg transition-all duration-500 hover:scale-105 hover:rotate-1 animate-float-medium"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Right Section - Form */}
         <div className="flex w-full sm:w-1/2 items-center justify-center">
@@ -39,7 +39,7 @@ export default function Home() {
       </div>
 
       {/* Bottom Animated SVG Waves */}
-      <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+      <svg className="absolute rotate-180 bottom-0 left-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path
           fill="rgba(0, 0, 0, 0.08)"
           d="M0,320L40,288C80,256,160,192,240,186.7C320,181,400,235,480,245.3C560,256,640,224,720,208C800,192,880,192,960,181.3C1040,171,1120,149,1200,138.7C1280,128,1360,128,1400,128L1440,128L1440,0L0,0Z"

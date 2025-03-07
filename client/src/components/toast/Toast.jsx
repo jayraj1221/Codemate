@@ -5,7 +5,7 @@ function Toast() {
         <Toaster
             position="top-right"
             toastOptions={{
-                duration: 30000, // 30 seconds
+                duration: 2000, // 2 seconds
             }}
         />
     );

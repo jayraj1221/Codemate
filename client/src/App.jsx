@@ -20,7 +20,7 @@ function App() {
                 <ChatContextProvider>
                     <Routes>
                       <Route path='/' element= { <LandingPage/>} />
-                      // <Route path="/homepage" element={<Home />} />
+                      <Route path="/homepage" element={<Home />} />
                       <Route path="/editor/:roomId" element={<EditorPage />} />
                     </Routes>
                 </ChatContextProvider>

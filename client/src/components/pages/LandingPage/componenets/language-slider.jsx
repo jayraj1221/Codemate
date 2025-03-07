@@ -13,8 +13,6 @@ const LanguageSlider = () => {
     { name: "Python", icon: <FileCode2 className="h-5 w-5" />, color: "#3776AB" },
     { name: "Java", icon: <FileCode2 className="h-5 w-5" />, color: "#007396" },
     { name: "C++", icon: <FileCode2 className="h-5 w-5" />, color: "#00599C" },
-    { name: "HTML/CSS", icon: <Braces className="h-5 w-5" />, color: "#E34F26" },
-    { name: "SQL", icon: <Database className="h-5 w-5" />, color: "#4479A1" },
     { name: "TypeScript", icon: <FileCode2 className="h-5 w-5" />, color: "#3178C6" },
     { name: "PHP", icon: <FileCode2 className="h-5 w-5" />, color: "#777BB4" },
     { name: "Ruby", icon: <FileCode2 className="h-5 w-5" />, color: "#CC342D" },
@@ -23,10 +21,7 @@ const LanguageSlider = () => {
     { name: "Kotlin", icon: <FileCode2 className="h-5 w-5" />, color: "#7F52FF" },
     { name: "Rust", icon: <FileCode2 className="h-5 w-5" />, color: "#000000" },
     { name: "C#", icon: <FileCode2 className="h-5 w-5" />, color: "#239120" },
-    { name: "Scala", icon: <FileCode2 className="h-5 w-5" />, color: "#DC322F" },
-    { name: "GraphQL", icon: <Code2 className="h-5 w-5" />, color: "#E10098" },
     { name: "Node.js", icon: <Server className="h-5 w-5" />, color: "#339933" },
-    { name: "React", icon: <Globe className="h-5 w-5" />, color: "#61DAFB" },
   ]
 
   // Duplicate the languages array to create a seamless loop

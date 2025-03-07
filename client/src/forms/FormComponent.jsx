@@ -215,7 +215,7 @@ const FormComponent = () => {
   const isJoining = status === USER_STATUS.ATTEMPTING_JOIN
 
   return (
-    <div className="w-full bg-white p-6 rounded-lg shadow-md">
+    <div className="w-full bg-white p-6 rounded-lg">
   <form onSubmit={joinRoom} className="w-full flex flex-col gap-5">
     <div className="space-y-3">
       <div className="relative group">
@@ -262,7 +262,7 @@ const FormComponent = () => {
     <button
       type="submit"
       disabled={isJoining}
-      className={`relative mt-2 w-full rounded-lg bg-blue-600 text-white px-6 py-3.5 text-lg font-semibold transition duration-300 hover:bg-blue-500 active:scale-[0.98] ${
+      className={`relative mt-2 w-full rounded-lg bg-black text-white px-6 py-3.5 text-lg font-semibold transition duration-300 hover:bg-black/80 active:scale-[0.98] ${
         isJoining ? "opacity-80 cursor-not-allowed" : ""
       }`}
     >
@@ -284,7 +284,7 @@ const FormComponent = () => {
 
   <div className="mt-6 flex justify-center">
     <button
-      className="flex items-center gap-2 text-sm font-medium text-blue-600 transition duration-300 hover:text-blue-700"
+      className="flex items-center gap-2 text-sm font-medium text-black transition duration-300 hover:text-gray-700"
       onClick={createNewRoomId}
     >
       <RefreshCw size={16} className="transition-transform duration-500 group-hover:rotate-180" />

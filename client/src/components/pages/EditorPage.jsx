@@ -18,7 +18,7 @@ function EditorPage() {
 
         const username = location.state?.username;
         if (!username) {
-            navigate("/", {
+            navigate("/homepage", {
                 state: { roomId },
             });
         } else if (roomId) {
