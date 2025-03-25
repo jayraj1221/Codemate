@@ -4,9 +4,6 @@ function Toast() {
     return (
         <Toaster
             position="top-right"
-            toastOptions={{
-                duration: 2000, // 2 seconds
-            }}
         />
     );
 }

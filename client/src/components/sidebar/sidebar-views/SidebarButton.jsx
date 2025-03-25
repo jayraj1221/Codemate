@@ -19,7 +19,7 @@ const SidebarButton = ({viewName , icon}) => {
         <button
             onClick={() => handleViewClick(viewName)}
             onMouseEnter={() => setShowTooltip(true)} // Show tooltip again on hover
-            className={`${buttonStyles.base} ${buttonStyles.hover}`}
+            className={`${buttonStyles.base} ${buttonStyles.hover} ${viewName === activeView ? "border-4 border-gray-800" : ""}`}
             {...(showTooltip && {
                 'data-tooltip-id': `tooltip-${viewName}`,
                 'data-tooltip-content': viewName
