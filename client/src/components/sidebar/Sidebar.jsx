@@ -37,7 +37,7 @@ const Sidebar = () => {
     <aside className="flex w-full md:h-full md:max-h-full md:min-h-full md:w-auto ">
     <div
         className={
-            "fixed bottom-0 left-0 z-50 flex h-[50px] w-full gap-8 self-end overflow-hidden border-t border-darkHover bg-dark p-2 md:static md:h-full md:w-[50px] md:min-w-[50px] md:flex-col md:border-r md:border-t-0 md:p-2 md:pt-4 rounded"
+            `fixed bottom-0 left-0 z-50 flex h-[50px] w-full gap-8 self-end overflow-hidden border-t bg-dark p-2 md:static md:h-full md:w-[50px] md:min-w-[50px] md:flex-col md:border-r md:border-t-0 md:p-2 md:pt-4 rounded`
       
         }>
         <SidebarButton
@@ -59,7 +59,7 @@ const Sidebar = () => {
 
         {/* Button to change activity state coding or drawing */}
         <div className="flex items-center justify-center h-fit">
-            <button className="flex items-center justify-cente  rounded transition-colors duration-200 ease-in-out hover:bg-[#3D404A] p-1.5"
+            <button className="flex items-center justify-center rounded-full transition-colors duration-200 ease-in-out hover:border-4 hover:border-gray-800 p-1.5"
             onClick={changeState}
             onMouseEnter={() => setShowTooltip(true)}
             data-tooltip-id="activity-state-tooltip"

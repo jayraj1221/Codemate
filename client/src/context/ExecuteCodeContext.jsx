@@ -26,6 +26,7 @@ const ExecuteCodeContextProvider = ({children}) => {
         id: null,
         name: "",
     });
+    const [isError, setIsError] = useState(false);
 
     // file contains id, name, content
     const { activeFile } = useFileSystem();
@@ -96,10 +97,12 @@ const ExecuteCodeContextProvider = ({children}) => {
 
             if(res.success)
             {
+                setIsError(false);
                 setOutput(res.output);
             }
             else
             {
+                setIsError(true);
                 setOutput(res.error);
             }
             
@@ -123,6 +126,7 @@ const ExecuteCodeContextProvider = ({children}) => {
                 isRunning,
                 supportedLanguages,
                 selectedLanguage,
+                isError,
                 setSelectedLanguage,
                 executeCode
             }}

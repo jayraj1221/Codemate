@@ -12,6 +12,7 @@ const RunView = () => {
     selectedLanguage,
     setSelectedLanguage,
     executeCode,
+    isError
   } = useExecuteCode();
 
   const handleLngChange = (ev) => {
@@ -102,8 +103,8 @@ const RunView = () => {
         </div>
         <div className="relative flex-1 bg-gray-50 border-2 border-gray-200 rounded-xl 
                       overflow-hidden has-[pre]:p-4">
-          <pre className="absolute inset-0 overflow-auto font-mono text-sm 
-                        whitespace-pre-wrap text-gray-800">
+          <pre className={`absolute left-2 top-2 inset-0 overflow-auto font-mono text-sm 
+                        whitespace-pre-wrap ${isError ? 'text-red-600' : 'text-gray-800' }`}>
             {output || "// Your program output will appear here..."}
           </pre>
         </div>

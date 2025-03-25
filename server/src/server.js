@@ -260,7 +260,7 @@ app.use((err, req, res, next) => {
 });
 
 // mongodb connection
-console.log(process.env.MONGODB_CONNECTION)
+// console.log(process.env.MONGODB_CONNECTION)
 mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
 {
     server.listen(PORT, ()=>
