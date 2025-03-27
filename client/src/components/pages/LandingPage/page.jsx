@@ -33,7 +33,7 @@ export default function LandingPage() {
     },
     {
       title: "Multi-Language Support",
-      description: "Code in JavaScript, Python, Java, C++, HTML, SQL and many more.",
+      description: "Code in JavaScript, Python, Java, C++, C, C# and many more.",
       icon: <Code2 className="h-8 w-8" />,
     },
     {
