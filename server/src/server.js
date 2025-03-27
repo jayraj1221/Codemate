@@ -261,14 +261,14 @@ app.use((err, req, res, next) => {
 
 // mongodb connection
 // console.log(process.env.MONGODB_CONNECTION)
-mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
-{
+// mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
+// {
     server.listen(PORT, ()=>
     {
         console.log(`🚀 Server is live on port ${PORT}! Ready to rock and roll! 🎉`);
     })
-})
-.catch((err)=>
-{
-    console.log(err);
-})
+// })
+// .catch((err)=>
+// {
+//     console.log(err);
+// })
