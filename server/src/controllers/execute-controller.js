@@ -10,7 +10,7 @@ const executeCode = async (req, res) => {
     }
 
     try {
-        console.log("Executing code...");
+        // console.log("Executing code...");
         const { type, output } = await main(code, language_id, stdin);
 
         if (type === 'stdout') {
@@ -34,10 +34,10 @@ function cmp(a, b)
 const getLanguages = async (req, res) => {
 
     const baseUrl = 'https://judge0-ce.p.rapidapi.com';
-    // const apiKey = process.env.API_KEY;
-    const apiKey = '9ca6e813f8msh2369d4f279cd875p1086f7jsn9e6b171bc3f8';
+    const apiKey = process.env.API_KEY;
+    // const apiKey = '9ca6e813f8msh2369d4f279cd875p1086f7jsn9e6b171bc3f8';
 
-    console.log("THIS IS API : " + apiKey);
+    // console.log("THIS IS API : " + apiKey);
     // console.log(req);
 
     const options = {
@@ -55,13 +55,13 @@ const getLanguages = async (req, res) => {
         
         result = result.filter((l) => l.id <= 80).sort(cmp);
 
-        console.log(result);
+        // console.log(result);
 
         res.status(200).json({ result: result });
     }
     catch(error)
     {
-        console.log("Error while fetching supported languages: ", error);
+        // console.log("Error while fetching supported languages: ", error);
         res.status(500).json({ error: "An error occured while fetching supported languages" });
     }
 };
