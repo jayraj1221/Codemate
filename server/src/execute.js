@@ -1,6 +1,6 @@
 const baseUrl = 'https://judge0-ce.p.rapidapi.com';
-// const apiKey = process.env.API_KEY;
-const apiKey = '9ca6e813f8msh2369d4f279cd875p1086f7jsn9e6b171bc3f8';
+const apiKey = process.env.API_KEY;
+// const apiKey = '9ca6e813f8msh2369d4f279cd875p1086f7jsn9e6b171bc3f8';
 
 async function execute(code, language_id, stdin) {
   const url = `${baseUrl}/submissions?base64_encoded=true&wait=true`;
@@ -24,7 +24,7 @@ async function execute(code, language_id, stdin) {
   try {
     const response = await fetch(url, options);
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (error) {
     console.error('Error in execute:', error);

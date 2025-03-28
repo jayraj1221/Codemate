@@ -15,14 +15,33 @@ const app = express();
 const PORT = 5000;
 
 app.use(express.json());
-app.use(cors());
+// console.log(process.env.DEVELOPMENT_FRONTEND_URL,process.env.PRODUCTION_FRONTEND_URL)
+const allowedOrigins = [
+    process.env.DEVELOPMENT_FRONTEND_URL,  // Development
+    process.env.PRODUCTION_FRONTEND_URL  // Production
+];
+  
+app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true,
+    })
+);
 app.use(express.static(path.join(__dirname, "../public")));
 
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL,
+        origin: allowedOrigins,
     },
+    methods: ["GET", "POST"],
+    credentials: true,
     maxHttpBufferSize: 1e8,
     pingTimeout: 60000,
 });
@@ -85,7 +104,7 @@ io.on("connection", (socket) => {
             io.to(socket.id).emit(SocketEvent.USERNAME_EXISTS);
             return;
         }
-        console.log("...............ROOM = " + roomId + " User  = " + username);
+        // console.log("...............ROOM = " + roomId + " User  = " + username);
         const user = {
             username,
             roomId,
@@ -96,7 +115,7 @@ io.on("connection", (socket) => {
             currentFile: null,
         };
         userSocketMap.push(user);
-        console.log(userSocketMap)
+        // console.log(userSocketMap)
         socket.join(roomId);
 
         const users = getUsersInRoom(roomId);
@@ -116,7 +135,7 @@ io.on("connection", (socket) => {
 
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_DISCONNECTED, { user });
 		
-        console.log("USER IS LEAVING .....>" + user.username);
+        // console.log("USER IS LEAVING .....>" + user.username);
         userSocketMap = userSocketMap.filter((u) => u.socketId !== socket.id);
 		socket.leave(roomId);
 	});
@@ -212,7 +231,7 @@ io.on("connection", (socket) => {
         socket.broadcast.to(roomId).emit(SocketEvent.RECEIVE_MESSAGE, {msg});
     });
     socket.on(SocketEvent.FILE_CREATED,(newFile) => {
-        console.log(newFile);
+        // console.log(newFile);
         let roomId = getRoomId(socket.id);
         socket.broadcast.to(roomId).emit(SocketEvent.FILE_CREATED,newFile)
     })
@@ -239,7 +258,7 @@ io.on("connection", (socket) => {
         const roomId = getRoomId(socket.id);
         if (!roomId) return; // Ensure socket is in a valid room
 
-        console.log(`Drawing update received from ${socket.id} for room ${roomId}` + elements);
+        // console.log(`Drawing update received from ${socket.id} for room ${roomId}` + elements);
         
         // Broadcast only to users in the same room
         socket.broadcast.to(roomId).emit("drawing-update", elements);
