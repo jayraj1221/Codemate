@@ -10,7 +10,6 @@ const executeCode = async (req, res) => {
     }
 
     try {
-        // console.log("Executing code...");
         const { type, output } = await main(code, language_id, stdin);
 
         if (type === 'stdout') {

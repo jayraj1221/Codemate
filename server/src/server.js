@@ -16,7 +16,6 @@ const app = express();
 const PORT = 5000;
 
 app.use(express.json());
-// console.log(process.env.DEVELOPMENT_FRONTEND_URL,process.env.PRODUCTION_FRONTEND_URL)
 const allowedOrigins = [
     process.env.DEVELOPMENT_FRONTEND_URL,  // Development
     process.env.PRODUCTION_FRONTEND_URL  // Production
@@ -93,8 +92,6 @@ function getUserBySocketId(socketId) {
 // });
 
 io.on("connection", (socket) => {
-    console.log("User connected: " + socket.id);
-
 
     socket.on(SocketEvent.JOIN_REQUEST, ({ roomId, username }) => {
         const isUsernameExist = getUsersInRoom(roomId).filter(
@@ -105,7 +102,7 @@ io.on("connection", (socket) => {
             io.to(socket.id).emit(SocketEvent.USERNAME_EXISTS);
             return;
         }
-        // console.log("...............ROOM = " + roomId + " User  = " + username);
+
         const user = {
             username,
             roomId,
@@ -116,7 +113,6 @@ io.on("connection", (socket) => {
             currentFile: null,
         };
         userSocketMap.push(user);
-        // console.log(userSocketMap)
         socket.join(roomId);
 
         const users = getUsersInRoom(roomId);
@@ -136,7 +132,7 @@ io.on("connection", (socket) => {
 
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_DISCONNECTED, { user });
 		
-        console.log("USER IS LEAVING .....>" + user.username);
+        
         userSocketMap = userSocketMap.filter((u) => u.socketId !== socket.id);
 		socket.leave(roomId);
 	});
@@ -158,16 +154,18 @@ io.on("connection", (socket) => {
 
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_OFFLINE, { socketId });
 	});
+    
     socket.on(SocketEvent.FILE_UPDATED, (data) => {
         const {fileId , newContent} = data;
         const roomId = getRoomId(socket.id)
-        // console.log(newContent)
+
 		if (!roomId) return
 		socket.broadcast.to(roomId).emit(SocketEvent.FILE_UPDATED, {
 			fileId,
 			newContent,
 		})
     });
+
 	socket.on(SocketEvent.USER_ONLINE, ({ socketId }) => {
 
 		userSocketMap = userSocketMap.map((u) => {
@@ -231,11 +229,13 @@ io.on("connection", (socket) => {
 
         socket.broadcast.to(roomId).emit(SocketEvent.RECEIVE_MESSAGE, {msg});
     });
+
     socket.on(SocketEvent.FILE_CREATED,(newFile) => {
-        // console.log(newFile);
+        
         let roomId = getRoomId(socket.id);
         socket.broadcast.to(roomId).emit(SocketEvent.FILE_CREATED,newFile)
-    })
+    });
+    
     socket.on(SocketEvent.FILE_RENAMED, ({ fileId, newName }) => {
 		const roomId = getRoomId(socket.id)
 		if (!roomId) return
@@ -243,23 +243,22 @@ io.on("connection", (socket) => {
 			fileId,
 			newName,
 		})
-	})
+	});
+    
     socket.on(SocketEvent.FILE_DELETED, ({ fileId }) => {
 		const roomId = getRoomId(socket.id)
 		if (!roomId) return
 		socket.broadcast.to(roomId).emit(SocketEvent.FILE_DELETED, { fileId })
-	})
+	});
+    
     socket.on(SocketEvent.SYNC_FILE_STRUCTURE, ({files, openFiles, activeFile, socketId}) => {
-        // console.log("files: "+ files[0].name);
-        // console.log("OpenFiles: "+ openFiles[0].name);
-        // console.log("ActiveFiles: "+ activeFile.name);
+        
         io.to(socketId).emit(SocketEvent.SYNC_FILE_STRUCTURE, { files, openFiles, activeFile });
-    })
+    });
+
     socket.on("drawing-update", (elements) => {
         const roomId = getRoomId(socket.id);
         if (!roomId) return; // Ensure socket is in a valid room
-
-        // console.log(`Drawing update received from ${socket.id} for room ${roomId}` + elements);
         
         // Broadcast only to users in the same room
         socket.broadcast.to(roomId).emit("drawing-update", elements);
@@ -280,7 +279,6 @@ app.use((err, req, res, next) => {
 });
 
 // mongodb connection
-// console.log(process.env.MONGODB_CONNECTION)
 mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
 {
     server.listen(PORT, ()=>

@@ -48,7 +48,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if ((status === USER_STATUS.DISCONNECTED || status === USER_STATUS.INITIAL) && !socket.connected) {
-      console.log("user status new");
+      // console.log("user status new");
       socket.connect();
       return;
     }
@@ -141,7 +141,7 @@ const Dashboard = () => {
     setLoading(true);
 
     const roomData = await roomService.getRoomById(roomId);
-    console.log("roomdata: ", roomData);
+    // console.log("roomdata: ", roomData);
     if(roomData.success)
     {
       const data = {

@@ -21,7 +21,6 @@ class CodeExecuteService
         }
 
         // will get result array of objects containing [{ id, name }]
-        console.log(response)
         return (await response.json());
     }
 

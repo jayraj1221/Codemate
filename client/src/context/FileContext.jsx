@@ -71,7 +71,6 @@ export const FileSystemProvider = ({ children }) => {
       name: fileName,
       content: "to start coding",
     };
-    // console.log("roomid: ", room._id);
     const data = await roomService.addFile(room._id, newFile);
 
     if (data.success) {
@@ -85,7 +84,6 @@ export const FileSystemProvider = ({ children }) => {
       }
     }
     else {
-      console.log("erro in file create: " + data.message);
       toast.error(data.message);
     }
 
@@ -145,8 +143,6 @@ export const FileSystemProvider = ({ children }) => {
   const renameFile = useCallback(
     async (fileId, newName, sendToSocket = true) => {
       // Update files array
-      // console.log(newName)
-      console.log("room 2", room);
 
       if (sendToSocket) {
         const data = await roomService.updateFileName(room._id, fileId, newName);
@@ -251,9 +247,6 @@ export const FileSystemProvider = ({ children }) => {
 
   const handleSyncFileStructure = useCallback(
     ({ files, openFiles, activeFile }) => {
-      // console.log("files: "+files[0].name);
-      // console.log("OpenFiles: "+ openFiles[0].name);
-      // console.log("ActiveFiles: "+ activeFile.name);
       setFiles(files);
       setOpenFiles(openFiles);
       setActiveFile(activeFile);
