@@ -13,6 +13,7 @@ const SocketEvent = {
     JOIN_ACCEPTED: "join-accepted",
     USER_JOINED: "user-joined",
     USER_DISCONNECTED: "user-disconnected",
+    SET_DISCONNECT: "set-disconnect",
     SYNC_FILE_STRUCTURE: "sync-file-structure",
     DIRECTORY_CREATED: "directory-created",
     DIRECTORY_UPDATED: "directory-updated",

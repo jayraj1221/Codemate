@@ -49,7 +49,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Code2 className="h-6 w-6 text-black" />
-            <span className="text-xl font-bold text-gray-900">Codemate</span>
+            <span className="text-xl font-bold text-gray-900">CodeMate</span>
           </div>
           {/* <nav className="hidden md:flex items-center gap-6">
             <Link href="#features" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
@@ -108,7 +108,7 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Link to="/homepage">
+                <Link to="/dashboard">
                 <Button size="lg" className="bg-black text-white hover:bg-black/80" onClick={()=>{}}>
                   Start Coding Now
                   <ChevronRight className="ml-2 h-4 w-4" />
@@ -192,47 +192,6 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
-        <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Wrap only the text inside the Link */}
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-6 text-gray-900"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            <Link to="/homepage" className="text-black hover:underline">
-              Ready to start collaborating?
-            </Link>
-          </motion.h2>
-
-          <motion.p
-            className="text-lg text-gray-600 mb-8"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Join thousands of developers who are already using Codemate to build amazing projects together.
-          </motion.p>
-
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            <Link to="/homepage">
-              <Button size="lg" className="bg-black text-white hover:bg-black/80">
-                Start Coding Now
-                <motion.div
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
-                >
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </motion.div>
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </div>
-    </section>
       </main>
     </div>
   )

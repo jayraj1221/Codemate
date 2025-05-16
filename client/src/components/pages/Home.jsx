@@ -1,5 +1,6 @@
-import codeIllustration from "../../assets/code-illustration.jpg"
-import FormComponent from "../../forms/FormComponent"
+// import codeIllustration from "../../assets/code-illustration.jpg"
+// import FormComponent from "../../forms/FormComponent"
+import AuthFormComponent from "../../forms/AuthFormComponent"
 
 export default function Home() {
   return (
@@ -33,7 +34,7 @@ export default function Home() {
               </h2>
               <p className="text-center text-lg text-gray-700">Join the collaboration now!</p>
             </div>
-            <FormComponent />
+            <AuthFormComponent />
           </div>
         </div>
       </div>

@@ -13,10 +13,15 @@ const messageSchema = new mongoose.Schema({
 
 const roomSchema = new mongoose.Schema({
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  title: { type: String, required: true},
   files: [fileSchema],
   createdAt: { type: Date, default: Date.now },
   messages: [messageSchema],
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-module.exports = mongoose.model('Room', roomSchema);
+const File = mongoose.model('File', fileSchema);
+const Room = mongoose.model('Room', roomSchema);
+const Message = mongoose.model('Message', messageSchema);
+
+module.exports = { File, Room, Message };
