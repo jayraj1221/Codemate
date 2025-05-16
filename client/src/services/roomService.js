@@ -61,7 +61,6 @@ class RoomService
             return { success: false, message: data.message };
 
         const {room} = data;
-        console.log("room: ", room);
         return { success: true,  room: room };
 
     }
@@ -136,42 +135,6 @@ class RoomService
 
         return { success: true, message: data.message, file: data.file };
     }
-
-    // async addUser(roomId, username)
-    // {
-    //     const token = this.authService.getToken();
-    //     let response;
-
-    //     try
-    //     {
-    //         response = await fetch(
-    //             this.url + "/add-user",
-    //             {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     "Authorization": `Bearer ${token}`
-    //                 },
-    //                 body: JSON.stringify({ roomId, username })
-    //             }
-    //         );
-    //     }
-    //     catch(err)
-    //     {
-    //         console.log(err);
-    //     }
-
-    //     if(response.status == 404)
-    //         return { success: false, message: 'User / Room not found' };
-    //     if(response.status == 400)
-    //         return { success: false, message: 'User already in room' };
-    //     if(response.status == 500)
-    //         return { success: false, message: 'Error adding user to room' };
-        
-    //     const data = await response.json();
-
-    //     return { success: true, message: data.message, room: data.room };
-    // }
 
     async addMessage(roomId, message, user)
     {

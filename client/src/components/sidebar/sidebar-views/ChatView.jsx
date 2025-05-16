@@ -4,7 +4,7 @@ import ChatIP from "../../chats/ChatIP"
 const ChatView = () => {
   return (
     <div className="w-full h-full bg-white text-gray-900 shadow-lg border-black border-4 rounded-3xl flex flex-col transition-all duration-300 overflow-hidden">
-      <div className="px-6 pt-6 pb-3 border-b border-gray-200">
+      <div className="px-6 pt-6 pb-3 border-gray-200">
         <h1 className="text-2xl font-semibold text-black tracking-tight">Chats</h1>
       </div>
 

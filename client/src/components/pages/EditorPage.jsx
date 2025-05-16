@@ -77,12 +77,9 @@ function EditorPage() {
             if(!roomId) return;
             
             const data = await roomService.getRoomById(roomId);
-            console.log("file: ", activeFile);
-            console.log("data: ", data);
             if(data.success)
             {
                 setRoom(data.room);
-                console.log("room: ", room);
                 if(data.room.files.length > 0)
                 {
                     setFiles(data.room.files);
@@ -129,32 +126,24 @@ function EditorPage() {
             const owner = roomData.room.owner;
 
             const data = await userService.getUserById(owner);
-            console.log("owner: ", owner);
-            console.log("Me owner: ", data.user);
-            console.log("all the users: ", users);
             if(data.success)
             {
                 if(users.length > 0)
                 {
-                    console.log("1");
                     const user = users.filter((u) => u.username === data.user.username);
                     
                     if(user.length < 1)
                     {
-                        console.log("4");
                         toast.error("Room owner is not in room");
                         setStatus(USER_STATUS.DISCONNECTED);
                         socket.disconnect();
                         navigate('/dashboard');
                     }
-                    // console.log("u: ", user);
                 }
                 else
                 {
-                    console.log("2");
                     if(currentUser.username != data.user.username)
                     {
-                        console.log("3");
                         toast.error("Room owner is not in room");
                         setStatus(USER_STATUS.DISCONNECTED);
                         socket.disconnect();
