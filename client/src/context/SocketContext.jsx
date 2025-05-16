@@ -11,6 +11,7 @@ import {
 import { toast } from "react-hot-toast" 
 import { io } from "socket.io-client"
 import { useAppContext } from "./AppContext"
+import UserService from "../services/userService";
 
 const SocketContext = createContext(SocketContextType)
 
@@ -36,9 +37,12 @@ const SocketProvider = ({children}) =>{
         // setDrawingData,
     } = useAppContext()
     
+    const userService = new UserService();
+
     const socket = useMemo(
         () => 
             io(BACKEND_URL ,{
+                autoConnect: false,
                 reconnectionAttempts : 1,
             }),
             []  
@@ -63,11 +67,20 @@ const SocketProvider = ({children}) =>{
     }, [setStatus])
 
     const handleJoiningAccept = useCallback(
-        ({ user, users }) => {
-            setCurrentUser(user)
-            setUsers(users)
-            // toast.dismiss()
-            setStatus(USER_STATUS.JOINED)
+        async ({ user, users }) => {
+            
+            const data = await userService.getUser(user.username);
+
+
+
+            if(data.success)
+            {
+                setCurrentUser(data.user);
+                setUsers(users);
+                // toast.dismiss()
+                setStatus(USER_STATUS.JOINED);
+            }
+
 
             // if (users.length > 1) {
             //     toast.loading("Syncing data, please wait...")

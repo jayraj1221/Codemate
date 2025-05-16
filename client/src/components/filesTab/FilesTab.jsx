@@ -31,7 +31,7 @@ const getFileIcon = (fileName) => {
 export default function FilesTab() {
   const { openFiles, setActiveFile, setOpenFiles, activeFile } = useFileSystem();
   const [showScrollButtons, setShowScrollButtons] = useState(false);
-  const [activeFileId, setActiveFileId] = useState(activeFile?.id || null);
+  const [activeFileId, setActiveFileId] = useState(activeFile?._id || null);
   const scrollContainerRef = useRef(null);
   const [draggedFileId, setDraggedFileId] = useState(null);
 
@@ -49,7 +49,7 @@ export default function FilesTab() {
   }, []);
 
   useEffect(() => {
-    setActiveFileId(activeFile?.id || null);
+    setActiveFileId(activeFile?._id || null);
   }, [activeFile]);
 
   const handleScroll = (direction) => {
@@ -66,7 +66,7 @@ export default function FilesTab() {
 
   const closeFile = (fileId, event) => {
     event?.stopPropagation();
-    const newFiles = openFiles.filter((file) => file.id !== fileId);
+    const newFiles = openFiles.filter((file) => file._id !== fileId);
     setOpenFiles(newFiles);
 
     if (activeFileId === fileId && newFiles.length > 0) {
@@ -89,8 +89,8 @@ export default function FilesTab() {
     e.preventDefault();
     if (!draggedFileId) return;
 
-    const draggedIndex = openFiles.findIndex((file) => file.id === draggedFileId);
-    const targetIndex = openFiles.findIndex((file) => file.id === targetFileId);
+    const draggedIndex = openFiles.findIndex((file) => file._id === draggedFileId);
+    const targetIndex = openFiles.findIndex((file) => file._id === targetFileId);
 
     if (draggedIndex === targetIndex) return;
 
@@ -121,21 +121,21 @@ export default function FilesTab() {
             <AnimatePresence initial={false}>
               {openFiles.map((file) => (
                 <motion.div
-                  key={file.id}
+                  key={file._id}
                   layout
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.2 }}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, file.id)}
+                  onDragStart={(e) => handleDragStart(e, file._id)}
                   onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, file.id)}
+                  onDrop={(e) => handleDrop(e, file._id)}
                   onClick={() => {
                     setActiveFile(file)
                   }}
                   className={`group flex items-center px-3 py-2 cursor-pointer select-none transition-all duration-200 ease-in-out rounded-t-lg border-t border-l border-r border-transparent hover:border-gray-700 hover:bg-gray-800 ${
-                    activeFileId === file.id
+                    activeFileId === file._id
                       ? "bg-gray-800 text-white border-gray-700 border-b-transparent"
                       : "text-gray-400"
                   }`}
@@ -145,7 +145,7 @@ export default function FilesTab() {
                     <span className="text-sm font-medium">{file.name}</span>
                   </div>
                   <button
-                    onClick={(e) => closeFile(file.id, e)}
+                    onClick={(e) => closeFile(file._id, e)}
                     className="ml-2 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-700"
                     title="Close file"
                   >

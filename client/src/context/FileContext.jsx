@@ -4,31 +4,59 @@ import { SocketEvent } from "../types/socket";
 import { useAppContext } from "./AppContext"
 import toast from "react-hot-toast";
 import JSZip from "jszip";
-import {saveAs} from "file-saver";
+import { saveAs } from "file-saver";
+// import AuthService from "../services/authService";
+import RoomService from "../services/roomService";
+// import { useParams } from "react-router-dom";
 
 const FileSystemContext = createContext();
 
 export const FileSystemProvider = ({ children }) => {
   const [files, setFiles] = useState([{
-    id: Date.now.toString(),
+    _id: Date.now.toString(),
     name: "index.cpp",
     content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
   }]);
   const [openFiles, setOpenFiles] = useState([{
-    id: Date.now.toString(),
+    _id: Date.now.toString(),
     name: "index.cpp",
     content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
   }]);
   const [activeFile, setActiveFile] = useState({
-    id: Date.now.toString(),
+    _id: Date.now.toString(),
     name: "index.cpp",
     content: "#include <iostream>\nint main() { std::cout << \"Hello, World!\"; return 0; }"
   });
   const { socket } = useSocket();
 
-  const {
-          setUsers
-      } = useAppContext()
+  const { setUsers, room } = useAppContext();
+
+  // const { roomId } = useParams();
+  // const authService = new AuthService();
+  const roomService = new RoomService();
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const token = authService.getToken();
+
+  //     if(!token) return;
+
+
+  //     if(!roomId) return;
+
+  //     const data = await roomService.getRoomsByUsername(roomId);
+
+  //     if(data.success)
+  //     {
+  //       setFiles(data.rooms.files);
+  //       setOpenFiles(data.rooms.files);
+  //       setActiveFile(data.rooms.files[0]); 
+  //     }
+
+  //   })();
+
+  // }, []);
+
   const handleFileCreated = (newFile) => {
     setFiles((prevFiles) => [...prevFiles, newFile]);
     setOpenFiles((prevOpenFiles) => [...prevOpenFiles, newFile]);
@@ -36,45 +64,65 @@ export const FileSystemProvider = ({ children }) => {
   };
 
   // Create new file locally & emit to socket
-  const createFile = (fileName) => {
+  const createFile = async (fileName) => {
     if (!fileName.trim()) return;
 
     const newFile = {
-      id: Date.now().toString(),
       name: fileName,
       content: "to start coding",
     };
+    // console.log("roomid: ", room._id);
+    const data = await roomService.addFile(room._id, newFile);
 
-    setFiles((prevFiles) => [...prevFiles, newFile]);
-    setOpenFiles((prevOpenFiles) => [...prevOpenFiles, newFile]);
-    setActiveFile(newFile); // Immediately set the new file as active
+    if (data.success) {
 
-    if (socket) {
-      socket.emit(SocketEvent.FILE_CREATED, newFile);
+      setFiles((prevFiles) => [...prevFiles, data.file]);
+      setOpenFiles((prevOpenFiles) => [...prevOpenFiles, data.file]);
+      setActiveFile(data.file); // Immediately set the new file as active
+
+      if (socket) {
+        socket.emit(SocketEvent.FILE_CREATED, data.file);
+      }
     }
+    else {
+      console.log("erro in file create: " + data.message);
+      toast.error(data.message);
+    }
+
   };
 
   // Update file content locally
   const updateFileContent = useCallback(
-    (fileId, newContent) => {
-      setFiles((prevFiles) =>
-        prevFiles.map((file) =>
-          file.id === fileId ? { ...file, content: newContent } : file
-        )
-      );
+    async (fileId, newContent) => {
 
-      setOpenFiles((prevOpenFiles) =>
-        prevOpenFiles.map((file) =>
-          file.id === fileId ? { ...file, content: newContent } : file
-        )
-      );
+      const data = await roomService.updateCode(room._id, fileId, newContent);
 
-      // Only update active file content if it's the same file
-      setActiveFile((prevActive) =>
-        prevActive?.id === fileId ? { ...prevActive, content: newContent } : prevActive
-      );
+      if(data.success)
+      {
+        setFiles((prevFiles) =>
+          prevFiles.map((file) =>
+            file._id === fileId ? { ...file, content: newContent } : file
+          )
+        );
+  
+        setOpenFiles((prevOpenFiles) =>
+          prevOpenFiles.map((file) =>
+            file._id === fileId ? { ...file, content: newContent } : file
+          )
+        );
+  
+        // Only update active file content if it's the same file
+        setActiveFile((prevActive) =>
+          prevActive?._id === fileId ? { ...prevActive, content: newContent } : prevActive
+        );
+      }
+      else
+      {
+        toast.error(data.message);
+      }
+
     },
-    []
+    [room]
   );
 
   // Handle file update from socket (Fix applied)
@@ -87,7 +135,7 @@ export const FileSystemProvider = ({ children }) => {
 
       // Only update activeFile **if it's the same file currently active**
       setActiveFile((prevActive) =>
-        prevActive?.id === fileId ? { ...prevActive, content: newContent } : prevActive
+        prevActive?._id === fileId ? { ...prevActive, content: newContent } : prevActive
       );
     },
     [updateFileContent]
@@ -95,60 +143,79 @@ export const FileSystemProvider = ({ children }) => {
 
   // Listen for file update events from socket
   const renameFile = useCallback(
-    (fileId, newName, sendToSocket = true) => {
+    async (fileId, newName, sendToSocket = true) => {
       // Update files array
-      console.log(newName)
+      // console.log(newName)
+      console.log("room 2", room);
+
+      if (sendToSocket) {
+        const data = await roomService.updateFileName(room._id, fileId, newName);
+        if (!data.success) {
+          toast.error(data.message);
+          return false;
+        }
+
+        socket.emit(SocketEvent.FILE_RENAMED, {
+          fileId,
+          newName,
+        });
+
+      }
+
+      // update files state
       setFiles((prevFiles) =>
         prevFiles.map((file) =>
-          file.id === fileId ? { ...file, name: newName } : file
+          file._id === fileId ? { ...file, name: newName } : file
         )
       );
 
       // Update open files
       setOpenFiles((prevOpenFiles) =>
         prevOpenFiles.map((file) =>
-          file.id === fileId ? { ...file, name: newName } : file
+          file._id === fileId ? { ...file, name: newName } : file
         )
       );
 
       // Update active file if it's the renamed file
       setActiveFile((prevActive) =>
-        prevActive?.id === fileId ? { ...prevActive, name: newName } : prevActive
+        prevActive?._id === fileId ? { ...prevActive, name: newName } : prevActive
       );
-
-      if (!sendToSocket) return true;
-      socket.emit(SocketEvent.FILE_RENAMED, {
-        fileId,
-        newName,
-      });
 
       return true;
     },
-    [socket]
+    [socket, activeFile?._id, openFiles]
   );
   const deleteFile = useCallback(
-    (fileId, sendToSocket = true) => {
+    async (fileId, sendToSocket = true) => {
+
+      if (sendToSocket) {
+        const data = await roomService.deleteFile(room._id, fileId);
+        if (!data.success) {
+          toast.error(data.message);
+          return;
+        }
+
+        socket.emit(SocketEvent.FILE_DELETED, { fileId });
+      }
       // Remove the file from files array
-      setFiles(prevFiles => 
-        prevFiles.filter(file => file.id !== fileId)
+      setFiles(prevFiles =>
+        prevFiles.filter(file => file._id !== fileId)
       );
 
       // Remove the file from openFiles
-      if (openFiles.some(file => file.id === fileId)) {
+      if (openFiles.some(file => file._id === fileId)) {
         setOpenFiles(prevOpenFiles =>
-          prevOpenFiles.filter(file => file.id !== fileId)
+          prevOpenFiles.filter(file => file._id !== fileId)
         );
       }
 
       // Set the active file to first file from open files if it's the file being deleted
-      if (activeFile?.id === fileId) {
+      if (activeFile?._id === fileId) {
         setActiveFile(openFiles[0]);
       }
 
-      if (!sendToSocket) return;
-      socket.emit(SocketEvent.FILE_DELETED, { fileId });
     },
-    [activeFile?.id, openFiles, socket]
+    [activeFile?._id, openFiles, socket]
   );
   const handleFileRenamed = useCallback(
     (data) => {
@@ -167,23 +234,23 @@ export const FileSystemProvider = ({ children }) => {
 
   const handleUserJoined = useCallback(
     ({ user }) => {
-      
+
       toast.success(`${user.username} joined the room`);
-      
+
       socket.emit(SocketEvent.SYNC_FILE_STRUCTURE, {
         files,
         openFiles,
         activeFile,
         socketId: user.socketId
       });
-      
+
       setUsers((prev) => [...prev, user]);
     },
     [activeFile, openFiles, socket, setUsers],
   );
 
   const handleSyncFileStructure = useCallback(
-    ({files, openFiles, activeFile}) => {
+    ({ files, openFiles, activeFile }) => {
       // console.log("files: "+files[0].name);
       // console.log("OpenFiles: "+ openFiles[0].name);
       // console.log("ActiveFiles: "+ activeFile.name);
@@ -203,7 +270,7 @@ export const FileSystemProvider = ({ children }) => {
     });
 
     // Download zip file
-    zip.generateAsync({type: "blob"}).then((content) => { saveAs(content, "files.zip") });
+    zip.generateAsync({ type: "blob" }).then((content) => { saveAs(content, "files.zip") });
   }
 
   const openFilesFromStorage = () => {
@@ -212,40 +279,49 @@ export const FileSystemProvider = ({ children }) => {
     input.type = 'file';
     input.multiple = true; // Allow multiple files to be selected
     input.accept = '.txt,.js,.cpp,.c,.py,.html,.css,.json,.ts,.java,.asm,.php,.cs,.h'; // Specify accepted file types (optional)
-  
+
     // Trigger the file selection dialog
     input.click();
-  
+
     // Handle file selection
     input.onchange = (e) => {
       const selectedFiles = e.target.files;
-  
+
       // Read each file and add it to the files state
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         const reader = new FileReader();
-  
-        reader.onload = (event) => {
+
+        reader.onload = async (event) => {
           const fileContent = event.target.result;
-  
+
           // Create a new file object
-          const newFile = {
-            id: Date.now().toString() + i, // Unique ID for each file
+          const newFile = { // Unique ID for each file
             name: file.name,
             content: fileContent,
           };
-  
+
+          // add file in room collection
+          const data = await roomService.addFile(room._id, newFile);
+
+          if(!data.success)
+          {
+            toast.error(data.message);
+            return;
+          }
+          
           // Add the new file to the files state
-          setFiles((prevFiles) => [...prevFiles, newFile]);
-          setOpenFiles((prevOpenFiles) => [...prevOpenFiles, newFile]);
-          setActiveFile(newFile); // Set the new file as active
-  
+          setFiles((prevFiles) => [...prevFiles, data.file]);
+          setOpenFiles((prevOpenFiles) => [...prevOpenFiles, data.file]);
+          setActiveFile(data.file); // Set the new file as active
+
           // Emit the new file to the socket (if needed)
           if (socket) {
-            socket.emit(SocketEvent.FILE_CREATED, newFile);
+            socket.emit(SocketEvent.FILE_CREATED, data.file);
           }
+
         };
-  
+
         // Read the file as text
         reader.readAsText(file);
       }
@@ -254,17 +330,17 @@ export const FileSystemProvider = ({ children }) => {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on(SocketEvent.FILE_CREATED,handleFileCreated);
+    socket.on(SocketEvent.FILE_CREATED, handleFileCreated);
     socket.on(SocketEvent.FILE_UPDATED, handleFileUpdate);
-    socket.on(SocketEvent.FILE_RENAMED,handleFileRenamed);
-    socket.on(SocketEvent.FILE_DELETED,handleFileDeleted);
+    socket.on(SocketEvent.FILE_RENAMED, handleFileRenamed);
+    socket.on(SocketEvent.FILE_DELETED, handleFileDeleted);
     socket.on(SocketEvent.USER_JOINED, handleUserJoined);
     socket.on(SocketEvent.SYNC_FILE_STRUCTURE, handleSyncFileStructure);
     return () => {
-      socket.off(SocketEvent.FILE_CREATED , handleFileCreated);
+      socket.off(SocketEvent.FILE_CREATED, handleFileCreated);
       socket.off(SocketEvent.FILE_UPDATED, handleFileUpdate);
-      socket.off(SocketEvent.FILE_RENAMED , handleFileRenamed);
-      socket.off(SocketEvent.FILE_DELETED , handleFileDeleted);
+      socket.off(SocketEvent.FILE_RENAMED, handleFileRenamed);
+      socket.off(SocketEvent.FILE_DELETED, handleFileDeleted);
       socket.off(SocketEvent.USER_JOINED);
       socket.off(SocketEvent.SYNC_FILE_STRUCTURE);
     };

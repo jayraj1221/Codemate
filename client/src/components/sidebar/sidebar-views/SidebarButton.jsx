@@ -1,11 +1,12 @@
 import { useViews } from "../../../context/ViewContext";
+import { useChatRoom } from "../../../context/ChatContext";
 import { Tooltip } from "react-tooltip";
 import { useState, useEffect } from "react";
 import { tooltipStyles , buttonStyles } from "./tootipsStyle";
 import VIEW from "../../../types/view";
 const SidebarButton = ({viewName , icon}) => {
-    const {isSidebarOpen,setisSidebarOpen,activeView,setactiveView } = useViews()
-    const [showTooltip , setShowTooltip] = useState(true)
+    const {isSidebarOpen,setisSidebarOpen,activeView,setactiveView } = useViews();
+    const [showTooltip , setShowTooltip] = useState(true);
     const handleViewClick = (viewName) => {
         if (viewName === activeView) {
             setisSidebarOpen(!isSidebarOpen)
@@ -13,7 +14,10 @@ const SidebarButton = ({viewName , icon}) => {
             setisSidebarOpen(true)
             setactiveView(viewName)
         }
-    }
+    };
+
+    const { isNewMsg } = useChatRoom();
+
     return (
         <div className="relative flex items-center flex-col">
         <button
@@ -29,8 +33,8 @@ const SidebarButton = ({viewName , icon}) => {
                 {icon}
             </div>
             {/* Show dot for new message in chat View Button */}
-            {viewName === VIEW.CHATS  && (
-                <div className="absolute right-0 top-0 h-3 w-3 rounded-full bg-primary"></div>
+            {viewName === VIEW.CHATS && isNewMsg  && (
+                <div className="absolute right-1 top-0 h-2 w-2 rounded-full bg-black"></div>
             )}
         </button>
         {/* render the tooltip */}

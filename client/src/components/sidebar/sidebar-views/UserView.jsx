@@ -7,19 +7,21 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Copy, Share, LogOut } from "lucide-react";
 import Users from "../../common/Users";
+import { USER_STATUS } from "../../../types/user";
+// import { useAppContext } from "../../../context/AppContext";
 
 const UserView = () => {
-  const { setStatus } = useAppContext();
+  const { setStatus, room } = useAppContext();
   const { socket } = useSocket();
   const navigate = useNavigate();
   const [isHovering, setIsHovering] = useState(null);
 
   const copy = async () => {
-    const url = window.location.href;
+    const url = room._id;
 
     try {
       await navigator.clipboard.writeText(url);
-      toast.success("URL copied to clipboard", {
+      toast.success("Room ID copied to clipboard", {
         style: {
           border: "1px solid #000",
           padding: "16px",
@@ -49,8 +51,8 @@ const UserView = () => {
 
   const leave = () => {
     socket.disconnect();
-    setStatus("DISCONNECTED");
-    navigate("/", { replace: true });
+    setStatus(USER_STATUS.DISCONNECTED);
+    navigate("/dashboard", { replace: true });
   };
 
   return (

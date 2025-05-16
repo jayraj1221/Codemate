@@ -10,6 +10,7 @@ const userRoutes = require("./routes/userRoutes");
 const roomRoutes = require("./routes/roomRoutes");
 const executeCodeRoutes = require("./routes/execute-routes");
 const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = 5000;
@@ -70,7 +71,7 @@ function getRoomId(socketId) {
 function getUserBySocketId(socketId) {
     const user = userSocketMap.find((user) => user.socketId === socketId);
     if (!user) {
-        console.error("User not found for socket ID:", socketId);
+        // console.error("User not found for socket ID:", socketId);
         return null;
     }
     return user;
@@ -92,7 +93,7 @@ function getUserBySocketId(socketId) {
 // });
 
 io.on("connection", (socket) => {
-    // console.log("User connected: " + socket.id);
+    console.log("User connected: " + socket.id);
 
 
     socket.on(SocketEvent.JOIN_REQUEST, ({ roomId, username }) => {
@@ -135,7 +136,7 @@ io.on("connection", (socket) => {
 
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_DISCONNECTED, { user });
 		
-        // console.log("USER IS LEAVING .....>" + user.username);
+        console.log("USER IS LEAVING .....>" + user.username);
         userSocketMap = userSocketMap.filter((u) => u.socketId !== socket.id);
 		socket.leave(roomId);
 	});
@@ -280,14 +281,14 @@ app.use((err, req, res, next) => {
 
 // mongodb connection
 // console.log(process.env.MONGODB_CONNECTION)
-// mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
-// {
+mongoose.connect(process.env.MONGODB_CONNECTION).then(()=>
+{
     server.listen(PORT, ()=>
     {
         console.log(`🚀 Server is live on port ${PORT}! Ready to rock and roll! 🎉`);
     })
-// })
-// .catch((err)=>
-// {
-//     console.log(err);
-// })
+})
+.catch((err)=>
+{
+    console.log(err);
+})

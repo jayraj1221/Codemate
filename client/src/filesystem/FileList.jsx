@@ -81,16 +81,16 @@ const FileList = () => {
       <ul className="py-2 max-h-[calc(100vh-100px)] overflow-y-auto">
         {files.map((file) => (
           <li
-            key={file.id}
+            key={file._id}
             onClick={() => {
               setActiveFile(file);
               setOpenFiles((prevFiles) =>
-                prevFiles.some((openFile) => openFile.id === file.id)
+                prevFiles.some((openFile) => openFile._id === file._id)
                   ? prevFiles
                   : [...prevFiles, file]
               );
             }}
-            onContextMenu={(e) => handleContextMenu(e, file.id)}
+            onContextMenu={(e) => handleContextMenu(e, file._id)}
             className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 transition cursor-pointer"
           >
             {getFileIcon(file.name)}
