@@ -105,7 +105,7 @@ cd Codemate
 
 ---
 
-### 💡 Technologies Used
+## 💡 Technologies Used
   - Frontend: React, Vite, TailwindCSS, Socket.IO client
   - Backend: Node.js, Express.js, Socket.IO, MongoDB (Mongoose), JWT
   - Code Execution: Judge0 API
@@ -113,7 +113,7 @@ cd Codemate
 
 ---
 
-### 🤝 Contributing
+## 🤝 Contributing
   Contributions are welcome!
   Feel free to open an issue to suggest features or report bugs.
   If you'd like to contribute directly:
