@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      # load from file with 'docker compose --env-file example.env up' or set here
+      - MONGODB_CONNECTION=${MONGO_URI}
+      - API_KEY=${JUDGE0_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - DEVELOPMENT_FRONTEND_URL=${DEVELOPMENT_FRONTEND_URL}
+      - PRODUCTION_FRONTEND_URL=${PRODUCTION_FRONTEND_URL}
+      - NODE_ENV=production
+    ports:
+      - "5000:5000"
+    networks:
+      - codemate-net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args: 
+        VITE_BACKEND_URL: http://localhost:5000/
+    restart: unless-stopped
+    ports:
+      - "5173:80"    # maps host 5173 to nginx 80 so same port as dev experience
+    environment:
+      - VITE_BACKEND_URL=http://localhost:5000/
+    depends_on:
+      - server
+    networks:
+      - codemate-net
+
+volumes:
+  mongo_data:
+
+networks:
+  codemate-net:
+    driver: bridge
