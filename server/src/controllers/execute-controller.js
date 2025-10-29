@@ -34,7 +34,6 @@ const getLanguages = async (req, res) => {
 
     const baseUrl = 'https://judge0-ce.p.rapidapi.com';
     const apiKey = process.env.API_KEY;
-    // const apiKey = '9ca6e813f8msh2369d4f279cd875p1086f7jsn9e6b171bc3f8';
 
     // console.log("THIS IS API : " + apiKey);
     // console.log(req);
