@@ -1,6 +1,6 @@
 # 🚀 CodeMate - Collaborative Code Editor
 
-**CodeMate** is a real-time collaborative coding platform 🧑‍💻👩‍💻 that lets developers code together in the browser, execute code in multiple languages instantly, and share sessions live — all from a modern web interface. Whether you're pair programming, tutoring, or doing coding interviews, CodeMate makes real-time collaboration effortless.
+**CodeMate** is a real-time collaborative coding platform 🧑‍💻👩‍💻 that lets developers code together in the browser, execute code in multiple languages instantly, and share sessions live - all from a modern web interface. Whether you're pair programming, tutoring, or doing coding interviews, CodeMate makes real-time collaboration effortless.
 
 ---
 
@@ -16,7 +16,7 @@ The main objective of **CodeMate** is to provide:
 ## ✨ Features
 
 - ⚡ **Real-Time Code Collaboration**  
-  Edit and share code with others live — changes are synchronized instantly using Socket.IO.
+  Edit and share code with others live - changes are synchronized instantly using Socket.IO.
 
 - 🌐 **Multi-Language Code Execution**  
   Run code in languages like Python, JavaScript, C++, Java, and more via the Judge0 API.
@@ -34,82 +34,147 @@ The main objective of **CodeMate** is to provide:
 
 ## 🛠️ Local Setup Guide
 
-> 🧠 Prerequisites: Make sure you have **Node.js**, **npm**, and **MongoDB** installed. You’ll also need a [Judge0 API key](https://judge0.com/).
+> 🧠 **Prerequisites:** Make sure you have **Node.js**, **npm**, and **MongoDB** installed.  
+> You’ll also need a [Judge0 API key](https://judge0.com/).
 
 ---
 
 ### 📥 Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/jayraj1221/Codemate.git
-cd Codemate
+git clone https://github.com/sumit3105/CodeMate.git
+cd CodeMate
 ```
 
-### 🧩 Step 2: Server Setup
+---
 
-  - 1️. Navigate to the server/ directory
-      ```bash
-      cd server
-      ```
-    2️. Create a ```.env``` file with the following variables:
-      ```bash
-      API_KEY=<your-judge0-api-key>
-      JWT_SECRET=<your-jwt-secret>
-      MONGODB_CONNECTION=<your-mongodb-connection-url>
-      DEVELOPMENT_FRONTEND_URL=<your-local-client-app-url>
-      PRODUCTION_FRONTEND_URL=<your-host-client-app-url>
-      ```
-      ✅ Replace placeholders with:    
-      - Your Judge0 API Key
-      - A secure JWT secret (e.g., a random string)
-      - Your MongoDB URI (e.g., from MongoDB Atlas or local DB)
-      - Your frontend development URL (e.g., http://localhost:5173)
-      - Your production frontend URL if deploying later
-  
-    3️. Install backend dependencies
-      ```bash
-      npm install
-      ```
-    4️. Start the backend server
-      ```bash
-      npm run dev
-      ```
+### ⚙️ Step 2: Create Root-Level `.env` File
 
-### 🎨 Step 3: Client Setup
+At the root of the project (same level as `client/` and `server/`), create a file named `.env` and add:
 
-  - 1. Navigate to the client/ directory
-       ```bash
-       cd client
-       ```
-    2. Create a ```.env``` file with the following content:
-       ```bash
-       VITE_BACKEND_URL=http://localhost:5000/
-       ```
-       - 🛠️ Update the URL if your backend is running on a different host or port.
-    3. Install frontend dependencies
-       ```bash
-       npm install
-       ```
-    4. Start the frontend development server
-       ```bash
-       npm run dev
-       ```
-       - 🌐 The app should open at http://localhost:5173 or the next available port.
+```env
+JUDGE0_API_KEY=<your-judge0-api-key>
+JWT_SECRET=<your-jwt-secret>
+DEVELOPMENT_FRONTEND_URL=http://localhost:5173
+PRODUCTION_FRONTEND_URL=<your-production-frontend-url>
+MONGO_URI=<your-mongo-uri>
+```
 
-### 🔗 Step 4: Using the Application
-  1. Open the frontend in your browser → http://localhost:5173
-  2. Create a new account or log in ✉️🔐
-  3. Create a new room or join an existing one using the Room ID 🔗
-  4. Start collaborating and coding in real-time with your peers 👯‍♀️👨‍👨‍👧‍👦
-  4. Click the Run ▶️ button to execute the code and see the output instantly ⚙️
+This root `.env` file is used by both Docker containers and backend configuration.
+
+---
+
+### 🧩 Step 3: Server Setup (Manual)
+
+1. Navigate to the server directory:
+   ```bash
+   cd server
+   ```
+2. Create a `.env` file with:
+   ```bash
+   API_KEY=<your-judge0-api-key>
+   JWT_SECRET=<your-jwt-secret>
+   MONGODB_CONNECTION=<your-mongodb-uri>
+   DEVELOPMENT_FRONTEND_URL=http://localhost:5173
+   PRODUCTION_FRONTEND_URL=<your-production-frontend-url>
+   ```
+3. Install backend dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the backend:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+### 🎨 Step 4: Client Setup (Manual)
+
+1. Navigate to the client directory:
+   ```bash
+   cd client
+   ```
+2. Create a `.env` file:
+   ```env
+   VITE_BACKEND_URL=http://localhost:5000/
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🐳 Containerization with Docker
+
+You can run **both frontend and backend** of CodeMate using Docker containers - no manual setup required.
+
+> 🧠 **Prerequisites:** Make sure you have **Docker** and **Docker Desktop** installed.
+
+### 📁 Folder Overview
+
+```
+CodeMate/
+│
+├── client/           # React + Vite frontend
+│   ├── Dockerfile
+│
+├── server/           # Node.js backend
+│   ├── Dockerfile
+│
+├── docker-compose.yml
+└── .env              # Root-level environment file
+```
+
+---
+
+### 🧰 Step 5: Build and Run with Docker Compose
+
+From the root of the project, simply run:
+
+```bash
+docker-compose --env-file .env up --build
+```
+
+This will:
+- Build and start the **backend** container (Node.js)
+- Build and start the **frontend** container (React + Nginx)
+- Automatically connect both containers in a Docker network
+
+Then open:
+- Frontend → http://localhost:80  
+- Backend API → http://localhost:5000  
+
+---
+
+## ✅ Verify Everything
+
+Once containers are running:
+- Visit **http://localhost**
+- Login or Sign up
+- Create a room and collaborate in real-time 🚀
+
+---
+
+## 🧹 Stop Containers
+
+```bash
+docker-compose down
+```
 
 ---
 
 ## 💡 Technologies Used
-  - Frontend: React, Vite, TailwindCSS, Socket.IO client
-  - Backend: Node.js, Express.js, Socket.IO, MongoDB (Mongoose), JWT
-  - Code Execution: Judge0 API
-  - Realtime Features: WebSockets (via Socket.IO)
+- **Frontend:** React, Vite, TailwindCSS, Socket.IO client  
+- **Backend:** Node.js, Express.js, Socket.IO, MongoDB (Mongoose), JWT  
+- **Execution API:** Judge0  
+- **Containerization:** Docker, Docker Compose  
+- **Reverse Proxy:** Nginx  
 
 ---
 
@@ -123,8 +188,5 @@ cd Codemate
   4. Push to the branch ```git push origin feature/YourFeature ```
   5. Create a pull request ✅
 
-Thank you for checking out CodeMate!
+Thank you for checking out CodeMate! <br>
 Happy coding 👨‍💻👩‍💻
-
-
-
